@@ -7,9 +7,12 @@ package com.zzc.weekcompetition;
  */
 public class MinimumOperations {
     public static void main(String[] args) {
-        System.out.println(minimumOperations("10"));
+        MinimumOperations min = new MinimumOperations();
+        System.out.println(min.minimumOperations("2245047"));
     }
-    public static int minimumOperations(String num) {
+
+    /*
+    * public static int minimumOperations(String num) {
 
         int res = Integer.MAX_VALUE;
         //方向遍历num，遇到不为0 或 5 直接跳过
@@ -68,5 +71,46 @@ public class MinimumOperations {
         cnt = num.length() - 1 - r;
         res = Math.min(res, cnt);
         return res == Integer.MAX_VALUE?1: res;
+    }*/
+    public  int minimumOperations(String num) {
+        //最多删除n次（变成0）
+        int res = num.length();
+        if (num.contains("0")) {
+            res--;
+        }
+        //寻找 50 00 75 25结尾的数，找到它们对应的下标
+        char[][] cs = {{'5', '0'},{'0', '0'}, {'7', '5'}, {'2', '5'}};
+        for (int i = 0; i < cs.length; i++) {
+            res = Math.min(res, deleteCnts(num, cs[i]));
+        }
+        return res;
+    }
+
+    public  int deleteCnts(String num, char[] targets) {
+        char lastCh = targets[1];
+        char nextCh = targets[0];
+        int res = Integer.MAX_VALUE;
+        int r = num.length()-1;
+        while (r >= 0) {
+            int t1 = r;
+            while (t1 >= 0 && num.charAt(t1) != lastCh) {
+                t1--;
+            }
+            if (t1 == -1) {
+                //没找到
+                return res;
+            }
+            //找下一个目标字符
+            int t2 = t1 - 1;
+            while (t2 >= 0 && num.charAt(t2) != nextCh) {
+                t2--;
+            }
+            if (t2 == -1) {
+                //没找到
+                return res;
+            }
+            return num.length() - t2 - 2;
+        }
+        return res;
     }
 }
