@@ -1,5 +1,7 @@
 package com.zzc.weekcompetition;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -10,53 +12,28 @@ import java.util.Set;
  */
 public class CountInterestingSubarrays {
     public static void main(String[] args) {
-
+        List<Integer> list = List.of(4, 5);
+        System.out.println(countInterestingSubarrays(list, 1, 0));
     }
-    public long getCount(List<Integer> nums, int modulo, int k, int sum) {
-        int l = 0;
-        int r = 0;
-        int res = 0;
-        while (l <nums.size() && r < nums.size()) {
-            int count = 0;
-            while (nums.get(l) % modulo != k) {
-                l++;
-            }
-            if (l < nums.size()) {
-                count++;
-            }
-            if (count == sum) {
-                r = l;
-                while (r <nums.size() && nums.get(r) % modulo != k) {
-                    res++;
-                    r++;
-                }
-                if (r == nums.size()) {
-                    return res;
-                }
-                l++;
-                while (l < r && nums.get(l) % modulo != k) {
-                    l++;
-                    res++;
-                }
-            }else {
 
-            }
+    public static long countInterestingSubarrays(List<Integer> nums, int modulo, int k) {
+        //s[i + 1] 为 nums 中前i项，满足 nums.get(i) % modulo == k 的个数
+        int[] s = new int[nums.size() + 1];
+        for (int i = 1; i < s.length; i++) {
+            s[i] = s[i - 1] + (nums.get(i - 1) % modulo == k ? 1 : 0);
         }
+        //key为s[i] value为值为s[i]出现的次数
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(s[0] % modulo, 1);
 
-        return res;
-    }
-    public long countInterestingSubarrays(List<Integer> nums, int modulo, int k) {
+        //(s[i + 1] - s[j]) % m == k <==> (s[i + 1] - k) % m == s[j] % m
+        //j <= i
         long res = 0L;
-        int l = 0;
-        int r = l;
-        int sum = 0;
         for (int i = 0; i < nums.size(); i++) {
-            if (nums.get(i) % modulo == k) {
-                sum++;
-            }
-        }
-        if (sum % modulo == k) {
-            res = res + getCount(nums, modulo, k, sum);
+            int sj = (s[i + 1] - k + modulo) % modulo;
+            res = res + map.getOrDefault(sj, 0);
+            //放在for循环外，无法保证sj 对应的下标j<= i
+            map.put(s[i + 1] % modulo, map.getOrDefault(s[i + 1] % modulo, 0) + 1);
         }
         return res;
     }
