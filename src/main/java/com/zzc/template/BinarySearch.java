@@ -9,9 +9,9 @@ public class BinarySearch {
 
     public static void main(String[] args) {
         BinarySearch binarySearch = new BinarySearch();
-        int[] arr = {1,2,3,4,5};
-        int target = 8;
-        System.out.println(binarySearch.leftBoundary(arr,target));
+        int[] arr = {1,2,3,4};
+        int target = 5;
+        System.out.println(binarySearch.specificTarget(arr,target));
     }
     public boolean checkMed(int med,int target) {
         if (med > target) {
@@ -37,12 +37,12 @@ public class BinarySearch {
     }
 
     //查找右边界
-   /* public int rightBoundary(int[] nums){
+    public int rightBoundary(int[] nums, int target){
         int l = 0;
         int r = nums.length - 1;
         int med = (r - l + 1 )/ 2 + l;
         while (l < r) {
-            if (checkMed(med)) {
+            if (checkMed(med, target)) {
                 l = med;
             }else {
                 r = med - 1;
@@ -50,5 +50,23 @@ public class BinarySearch {
             med = (r - l + 1 ) / 2 + l;
         }
         return med;
-    }*/
+    }
+
+    //查找指定值
+    public int specificTarget(int[] nums, int target) {
+        int l = 0;
+        int r = nums.length - 1;
+        int res = -1;
+        while (l <= r) {
+            int med = (r - l)/ 2 + l;
+            if (target == nums[med]) {
+                return med;
+            }else if (target > med) {
+                l = med + 1;
+            }else {
+                r = med -1;
+            }
+        }
+        return res;
+    }
 }
