@@ -42,59 +42,63 @@ public class CanFinish {
     public static void main(String[] args) {
         CanFinish can = new CanFinish();
         //int[][] prerequisites = {{1, 0}, {0, 1}};
-        int[][] prerequisites = {{1,4},{2,4},{3,1},{3,2}};
+        //int[][] prerequisites = {{1,4},{2,4},{3,1},{3,2}};
+        //int[][] prerequisites = {{0,10},{3,18},{5,5},{6,11},{11,14},{13,1},{15,1},{17,4}};
         //int[][] prerequisites = {{1, 0}};
-        System.out.println(can.canFinish(5, prerequisites));
+        int[][] prerequisites = {{0,1},{3,1},{1,3},{3,2}};
+        //int[][] prerequisites = {{1, 0}, {2, 1}};
+        System.out.println(can.canFinish(4, prerequisites));
     }
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[][] grids = new int[numCourses][numCourses];
         for(int[] edge : prerequisites) {
-            grids[edge[0]][edge[1]] = 1;
-        }
-        List<Integer> roots = new ArrayList<>();
-        for (int i = 0; i < numCourses; i++) {
-            int j = 0;
-            while (j < numCourses && grids[j][i] != 1) {
-                j++;
-            }
-            if (j == numCourses) {
-                roots.add(i);
+            if (edge[0] != edge[1]) {
+                grids[edge[0]][edge[1]] = 1;
+            }else {
+                return false;
             }
         }
-        if (roots.isEmpty()) {
-            return false;
-        }
 
-
-        boolean[] isVisited = new boolean[numCourses];
+        //0：未搜索  1：搜索中 2：已完成
+        int[] isVisited = new int[numCourses];
         //从每个根节点开始dfs
-        for (int root = 0; root < roots.size() && !isVisited[roots.get(root)]; root++) {
-            isVisited[roots.get(root)] = true;
-            boolean res = dfs(roots.get(root), isVisited, grids);
-            if (!res){
+        for (int i = 0; i < isVisited.length; i++) {
+            //从未搜索的结点开始
+            if (isVisited[i] == 0) {
+                boolean res = dfs(i, isVisited, grids);
+                if (!res){
+                    return false;
+                }
+            }else if (isVisited[i] == 1) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean dfs(int root, boolean[] isVisited, int[][] grid) {
+    public boolean dfs(int root, int[] isVisited, int[][] grid) {
+        //当前结点正在搜索中
+        isVisited[root] = 1;
         //可能的下一个结点
         List<Integer> nexts = new ArrayList<>();
         for (int i = 0; i < grid.length; i++) {
             if (grid[root][i] == 1) {
                 //是下个结点
-                if (isVisited[i]) {
+                if (isVisited[i] == 0) {
+                    nexts.add(i);
+                }else if (isVisited[i] == 1){
+                    //下一个结点在搜索中，说明形成了环
                     return false;
                 }
-                nexts.add(i);
-                isVisited[i] = true;
-                if (!dfs(i, isVisited, grid)) {
-                    return false;
-                }
-                isVisited[i] = false;
             }
         }
+        for (int i = 0; i < nexts.size(); i++) {
+            int nextNode = nexts.get(i);
+            if (!dfs(nextNode, isVisited, grid)) {
+                return false;
+            }
+        }
+        isVisited[root] = 2;
         return true;
     }
 }
