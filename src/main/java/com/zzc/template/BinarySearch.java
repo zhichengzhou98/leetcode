@@ -20,7 +20,7 @@ public class BinarySearch {
         return false;
     }
 
-    //查找左边界: 满足checkMed的最小值
+    //查找左边界: 满足checkMed的最小值  大于（等于）target的最小值（取等于时， checkMed判断条件也需要取等于）
     public int leftBoundary(int[] nums, int target){
         int l = 0;
         int r = nums.length - 1;
