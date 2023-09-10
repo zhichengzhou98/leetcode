@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author zc.zhou
- * @Description 820. 单词的压缩编码 字典树
+ * @Description 820. 单词的压缩编码
  * @create 2023-09-09 18:54
  */
 public class MinimumLengthEncoding {
@@ -14,6 +14,7 @@ public class MinimumLengthEncoding {
         String[] words = {"feipyxx","e"};
         System.out.println(minimumLengthEncoding(words));
     }
+    //TODO 字典树
     public static int minimumLengthEncoding(String[] words) {
         HashSet<String> res = new HashSet<>(List.of(words));
 
