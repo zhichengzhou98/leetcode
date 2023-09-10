@@ -36,20 +36,27 @@ public class BinarySearch {
         return nums[med];
     }
 
-    //查找右边界
+    //查找右边界 小于等于 target的最大值  checkMedRight 小于等于时为true！！！
     public int rightBoundary(int[] nums, int target){
         int l = 0;
         int r = nums.length - 1;
         int med = (r - l + 1 )/ 2 + l;
         while (l < r) {
-            if (checkMed(med, target)) {
+            if (checkMedRight(nums[med], target)) {
                 l = med;
             }else {
                 r = med - 1;
             }
             med = (r - l + 1 ) / 2 + l;
         }
-        return med;
+        return nums[med];
+    }
+
+    public boolean checkMedRight(int med,int target) {
+        if (med > target) {
+            return false;
+        }
+        return true;
     }
 
     //查找指定值
