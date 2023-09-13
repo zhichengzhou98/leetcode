@@ -1,7 +1,6 @@
 package com.zzc.backtracking;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zzc
@@ -75,10 +74,13 @@ class TreeNode {
     TreeNode left;
     TreeNode right;
 
+    List<Integer> resStr;
     TreeNode() {
+        resStr = new ArrayList<>();
     }
 
     TreeNode(int val) {
+        resStr = new ArrayList<>();
         this.val = val;
     }
 
@@ -86,5 +88,29 @@ class TreeNode {
         this.val = val;
         this.left = left;
         this.right = right;
+    }
+
+    @Override
+    public String toString() {
+        //层序遍历
+        List<TreeNode> s = new ArrayList<>();
+        s.add(this);
+        while (!s.isEmpty()) {
+            TreeNode current = s.remove(0);
+            if (current != null) {
+                resStr.add(current.val);
+                if (current.left!=null || current.right != null) {
+                    s.add(current.left);
+                    s.add(current.right);
+                }else {
+                    if (s.size() == 1 && s.get(0) == null) {
+                        s.remove(0);
+                    }
+                }
+            }else {
+                resStr.add(null);
+            }
+        }
+        return resStr.toString();
     }
 }

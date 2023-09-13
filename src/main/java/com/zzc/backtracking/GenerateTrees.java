@@ -11,44 +11,41 @@ import java.util.List;
 public class GenerateTrees {
 
     public static void main(String[] args) {
-        
+        GenerateTrees gt = new GenerateTrees();
+        System.out.println(gt.generateTrees(3));
+        /*TreeNode node3 = new TreeNode(3);
+
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node1 = new TreeNode(1);
+        node3.left = node2;
+        node2.left = node1;
+        System.out.println(node3);*/
     }
     
-    List<TreeNode> res;
-    TreeNode root;
+
     public List<TreeNode> generateTrees(int n) {
-        res = new ArrayList<>();
-        List<Integer> nodeVals = new ArrayList<>();
-        for (int i = 1; i <= n; i++) {
-            nodeVals.add(i);
-        }
-        for (int i = 0; i < nodeVals.size(); i++) {
-            int rootVal = nodeVals.get(i);
-            root = new TreeNode(rootVal);
-            List<Integer> copy = new ArrayList<>(nodeVals);
-            nodeVals.remove(i);
-            dfs(copy, root);
-        }
-        
-        return res;
+
+        return dfs(1, n, n);
     }
 
-    public TreeNode dfs(List<Integer> nodeVals, TreeNode node) {
-        if (nodeVals.size() == 0) {
-            res.add(root);
-            return null;
+    public List<TreeNode> dfs(int start, int end, int n) {
+        List<TreeNode> res = new ArrayList<>();
+        if (start > end) {
+            res.add(null);
+            return res;
         }
-        for (int i = 0; i < nodeVals.size(); i++) {
-            Integer first = nodeVals.get(i);
-            if (first > node.val) {
-                //右结点
-                List<Integer> copy = new ArrayList<>(nodeVals);
-                copy.remove(i);
-                node.right = dfs(copy, new TreeNode(first));
-                //回溯
-                node.right = null;
+        for (int i = start; i <= end; i++) {
+            List<TreeNode> leftTrees = dfs(start, i - 1, n);
+            List<TreeNode> rightTrees = dfs(i + 1, end, n);
+            for (TreeNode leftTree : leftTrees) {
+                for (TreeNode rightTree : rightTrees) {
+                    TreeNode root = new TreeNode(i);
+                    root.left = leftTree;
+                    root.right = rightTree;
+                    res.add(root);
+                }
             }
         }
-        return null;
+        return res;
     }
 }

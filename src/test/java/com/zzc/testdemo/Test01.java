@@ -2,10 +2,7 @@ package com.zzc.testdemo;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -99,6 +96,15 @@ public class Test01 {
         Set<String> set = Set.of("z", "x", "c");
         System.out.println(set.contains("z"));
     }
+
+    @Test
+    public void testArrayDeque() {
+        /*List<Integer> deque = new ArrayList<>();
+        deque.add(null);*/
+        Queue<String> queue2 = new ArrayDeque<>();
+        //queue2.add(null);
+    }
+
 
     @Test
     public void replaceStr() {
