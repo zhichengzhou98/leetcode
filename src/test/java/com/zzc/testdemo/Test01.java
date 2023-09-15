@@ -108,7 +108,7 @@ public class Test01 {
 
     @Test
     public void replaceStr() {
-        String str = "[[0,1],[1,0],[4,0],[0,4],[3,3],[2,4]]";
+        String str = "[[0,2],[2,1],[2,0]]";
         String des = str.replace("[", "{").replace("]", "}");
         System.out.println(des);
     }
