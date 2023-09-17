@@ -8,10 +8,45 @@ package com.zzc.leetcode_sep;
 public class RobII {
     public static void main(String[] args) {
         int[] arr = {4,1,2,7,5,3,1};
-        System.out.println(rob(arr));
+        RobII robII = new RobII();
+        System.out.println(robII.rob(arr));
     }
 
-    public static int rob(int[] nums) {
+    public int rob(int[] arr) {
+        //只有一间
+        if (arr.length==1) {
+            return arr[0];
+        }
+        //第一间不偷
+        int temp = arr[0];
+        arr[0] = 0;
+        int res1 = rob1(arr);
+        //最后一间不偷
+        arr[0] = temp;
+        arr[arr.length - 1] = 0;
+        int res2 = rob1(arr);
+        return Math.max(res1, res2);
+    }
+
+    public int rob1(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        if (nums.length == 2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        int[] money = new int[nums.length];
+        money[0] = nums[0];
+        money[1] = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < money.length; i++) {
+            money[i] = Math.max(money[i - 1], nums[i] + money[i - 2]);
+        }
+        return money[money.length - 1];
+    }
+
+
+
+    /*public static int rob(int[] nums) {
         int[] res = new int[nums.length];
         if (nums.length == 1) {
             return nums[0];
@@ -47,5 +82,5 @@ public class RobII {
         }
 
         return res[res.length - 1];
-    }
+    }*/
 }
