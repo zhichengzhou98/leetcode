@@ -105,6 +105,14 @@ public class Test01 {
         //queue2.add(null);
     }
 
+    @Test
+    public void testMap() {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(null, 1);
+        map.put(null, 2);
+        System.out.println(map.get(null));
+    }
+
 
     @Test
     public void replaceStr() {
