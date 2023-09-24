@@ -9,14 +9,103 @@ import java.util.*;
  */
 public class LockingTree {
     public static void main(String[] args) {
-        int[] p = {-1,4,9,0,6,1,0,6,3,1};
+        int[] p = {-1,0,3,4,7,4,3,0,1,8};
         LockingTree lockingTree = new LockingTree(p);
-        boolean f1 = lockingTree.lock(2,47);
-        boolean f2 = lockingTree.upgrade(4,12);
-        //boolean f3= lockingTree.upgrade(1,15);
+        boolean f1 = lockingTree.lock(8,25);
+        boolean f2 = lockingTree.lock(5,50);
+        boolean f3= lockingTree.upgrade(1,15);
         System.out.println(1);
     }
     //上锁的结点集合
+    int[] lockedNodes;
+    int[] parent;
+    //当前结点值， 当前结点结构体
+    private List<Integer>[] children;
+    public LockingTree(int[] parent) {
+        this.parent = parent;
+        lockedNodes = new int[parent.length];
+        children = new List[parent.length];
+        for (int i = 0; i < parent.length; i++) {
+            children[i] = new ArrayList<>();
+        }
+        //遍历parent
+        for (int i = 0; i < parent.length; i++) {
+            int p = parent[i];
+            if (p >= 0) {
+                children[p].add(i);
+            }
+        }
+    }
+
+
+
+    public boolean lock(int num, int user) {
+        if (lockedNodes[num] == 0) {
+            lockedNodes[num] = user;
+            //加锁
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unlock(int num, int user) {
+        if (lockedNodes[num] == user) {
+            lockedNodes[num] = 0;
+            //解锁
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isZuXian(int num) {
+        int parent1 = parent[num];
+        while (parent1 != -1) {
+            //该节点被上锁
+            if (lockedNodes[parent1] != 0) {
+                return false;
+            }
+            parent1 = parent[parent1];
+        }
+        return true;
+    }
+
+    public boolean isChild(int num) {
+        boolean flag = false;
+        List<Integer> children1 = children[num];
+        while (!children1.isEmpty()) {
+            Integer child1 = children1.remove(0);
+            if (lockedNodes[child1] != 0) {
+                flag = true;
+                //解锁
+                //由于可以给任意用户解锁，所以此user应该是给i上锁的user
+                unlock(child1, lockedNodes[child1]);
+            }
+            //获取child1的子节点
+            List<Integer> c2 = children[child1];
+            children1.addAll(c2);
+        }
+        return flag;
+    }
+    public boolean upgrade(int num, int user) {
+        //当前结点是否被上锁
+        if (lockedNodes[num] == 0) {
+            //获取父节点
+            if (!isZuXian(num)) {
+                return false;
+            }
+            //获取子节点
+            boolean flag = isChild(num);
+
+            if (flag) {
+                //给该结点上锁
+                lock(num, user);
+            }
+            return flag;
+        }
+        return false;
+    }
+
+    /*//上锁的结点集合
     Set<Integer> lockedNodes;
     int[] parent;
     //当前结点值， 当前结点结构体
@@ -131,7 +220,7 @@ public class LockingTree {
             return flag;
         }
         return false;
-    }
+    }*/
 }
 
 class LockingTreeStruct {
