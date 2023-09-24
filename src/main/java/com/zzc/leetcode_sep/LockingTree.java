@@ -14,6 +14,7 @@ public class LockingTree {
         boolean f1 = lockingTree.lock(8,25);
         boolean f2 = lockingTree.lock(5,50);
         boolean f3= lockingTree.upgrade(1,15);
+        boolean f4= lockingTree.lock(3,21);
         System.out.println(1);
     }
     //上锁的结点集合
@@ -36,8 +37,6 @@ public class LockingTree {
             }
         }
     }
-
-
 
     public boolean lock(int num, int user) {
         if (lockedNodes[num] == 0) {
@@ -72,17 +71,15 @@ public class LockingTree {
     public boolean isChild(int num) {
         boolean flag = false;
         List<Integer> children1 = children[num];
-        while (!children1.isEmpty()) {
-            Integer child1 = children1.remove(0);
+        for (int i = 0; i < children1.size(); i++) {
+            Integer child1 = children1.get(i);
             if (lockedNodes[child1] != 0) {
                 flag = true;
                 //解锁
                 //由于可以给任意用户解锁，所以此user应该是给i上锁的user
                 unlock(child1, lockedNodes[child1]);
             }
-            //获取child1的子节点
-            List<Integer> c2 = children[child1];
-            children1.addAll(c2);
+            flag = flag | isChild(child1);
         }
         return flag;
     }
@@ -99,8 +96,8 @@ public class LockingTree {
             if (flag) {
                 //给该结点上锁
                 lock(num, user);
+                return true;
             }
-            return flag;
         }
         return false;
     }
