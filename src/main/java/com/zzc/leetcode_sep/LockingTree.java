@@ -83,6 +83,23 @@ public class LockingTree {
         }
         return flag;
     }
+    /*public boolean isChild(int num) {
+        boolean flag = false;
+        List<Integer> children1 = children[num];
+        while (!children1.isEmpty()) {
+            //remove 后将children1 即children[num]中的数据改变了
+            Integer child1 = children1.remove(0);
+            if (lockedNodes[child1] != 0) {
+                flag = true;
+                //解锁
+                //由于可以给任意用户解锁，所以此user应该是给i上锁的user
+                unlock(child1, lockedNodes[child1]);
+            }
+            //获取child1的子节点
+            flag = flag | isChild(child1);
+        }
+        return flag;
+    }*/
     public boolean upgrade(int num, int user) {
         //当前结点是否被上锁
         if (lockedNodes[num] == 0) {
