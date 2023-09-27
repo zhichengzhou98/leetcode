@@ -89,6 +89,8 @@ public class SwimInWater {
     public void dfs(int[] current, int med, int[][] grid, boolean[][] isVisited) {
         int x = current[0];
         int y = current[1];
+        //记录当前位置来过
+        isVisited[x][y]= true;
         if (x == grid.length - 1 && y == grid.length - 1) {
             flag = true;
             return;
@@ -97,8 +99,6 @@ public class SwimInWater {
             int nextX = x + dir[i][0];
             int nextY = y + dir[i][1];
             if (checkPos(nextX, nextY) && med >= grid[nextX][nextY] && !isVisited[nextX][nextY]) {
-                //记录当前位置来过
-                isVisited[nextX][nextY]= true;
                 dfs(new int[]{nextX, nextY}, med, grid, isVisited);
                 if (flag) {
                     return;
