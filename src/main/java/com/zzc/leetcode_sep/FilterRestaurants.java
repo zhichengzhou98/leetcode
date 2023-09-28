@@ -15,22 +15,13 @@ public class FilterRestaurants {
     }
 
     public List<Integer> filterRestaurants(int[][] restaurants, int veganFriendly, int maxPrice, int maxDistance) {
-        if (veganFriendly == 1) {
-            List<Integer> collect = Arrays.stream(restaurants).filter(arr -> arr[2] == 1 && arr[3] <= maxPrice && arr[4] <= maxDistance)
-                    .sorted((a, b) -> {
-                        if (b[1] == a[1]) {
-                            return b[0] - a[0];
-                        }
-                        return b[1] - a[1];
-                    }).map(a -> a[0]).collect(Collectors.toList());
-            return collect;
-        }
-        return Arrays.stream(restaurants).filter(arr ->arr[3] <= maxPrice && arr[4] <= maxDistance)
+        List<Integer> collect = Arrays.stream(restaurants).filter(arr -> (veganFriendly != 1 || arr[2] == 1) && arr[3] <= maxPrice && arr[4] <= maxDistance)
                 .sorted((a, b) -> {
                     if (b[1] == a[1]) {
                         return b[0] - a[0];
                     }
                     return b[1] - a[1];
                 }).map(a -> a[0]).collect(Collectors.toList());
+        return collect;
     }
 }
