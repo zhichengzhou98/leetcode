@@ -2,7 +2,7 @@ package com.zzc.leetcode_sep;
 
 import com.zzc.utils.ArrayUtils;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author zc.zhou
@@ -17,6 +17,60 @@ public class FullBloomFlowers {
         System.out.println(Arrays.toString(fBF.fullBloomFlowers(f, p)));
     }
     public int[] fullBloomFlowers(int[][] flowers, int[] people) {
+        // 使用treemap
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for (int i = 0; i < flowers.length; i++) {
+            int next = flowers[i][1];
+            next++;
+            map.put(flowers[i][0],map.getOrDefault(flowers[i][0], 0) + 1);
+            map.put(next, map.getOrDefault(next, 0)-1);
+        }
+        int firstKey = map.firstKey();
+        int lastElement = 0;
+        //0 为时间， 1 为数量
+        List<int[]> list = new ArrayList<>();
+        for(Map.Entry<Integer, Integer> e : map.entrySet()) {
+            Integer key = e.getKey();
+            Integer value = e.getValue();
+            lastElement = lastElement + value;
+            list.add(new int[]{key, lastElement});
+        }
+        int[] res1 = new int[people.length];
+        for (int i = 0; i < res1.length; i++) {
+            if (people[i] < firstKey) {
+                res1[i] = 0;
+            }else {
+                //查找右边界
+                res1[i] = binarySearch(list, people[i]);
+            }
+        }
+        return res1;
+    }
+
+    public int binarySearch(List<int[]> list, int target){
+        int l = 0;
+        int r = list.size() - 1;
+        int med = (r - l + 1 )/ 2 + l;
+        while (l < r) {
+            //不超过target的最大值
+            if (checkMedRight(list.get(med)[0], target)) {
+                l = med;
+            }else {
+                r = med - 1;
+            }
+            med = (r - l + 1 ) / 2 + l;
+        }
+        return list.get(med)[1];
+    }
+
+    public boolean checkMedRight(int med, int target) {
+        if(med <= target) {
+            return true;
+        }
+        return false;
+    }
+
+    /*public int[] fullBloomFlowers(int[][] flowers, int[] people) {
         int maxTime = Integer.MIN_VALUE;
         for (int i = 0; i < flowers.length; i++) {
             maxTime = Math.max(maxTime, flowers[i][1]);
@@ -40,5 +94,5 @@ public class FullBloomFlowers {
             }
         }
         return res;
-    }
+    }*/
 }

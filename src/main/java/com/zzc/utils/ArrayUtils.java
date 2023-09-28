@@ -72,12 +72,7 @@ public class ArrayUtils {
         // 解析列表
         //转链表
         String[] split = arrayStr.substring(1, arrayStr.length() - 1).split(",");
-        if (type == Integer.class) {
-            return (List<E>) Arrays.stream(split).map(Integer::parseInt).collect(Collectors.toList());
-        }else if (type == String.class) {
-            return (List<E>) Arrays.stream(split).collect(Collectors.toList());
-        }
-        return null;
+        return (List<E>)Arrays.stream(split).map(e -> parseElement(e, type)).collect(Collectors.toList());
     }
 
     private static <E> List<List<E>> parse2DList(String arrayStr, Class<E> elementType) {
