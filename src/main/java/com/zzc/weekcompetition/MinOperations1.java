@@ -20,21 +20,13 @@ public class MinOperations1 {
     }
 
     public static int minOperations(String s1, String s2, int x) {
-        int cnt1 = 0;
-        int cnt2 = 0;
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < s1.length(); i++) {
-            if (s1.charAt(i) == '1') {
-                cnt1++;
-            }
-            if (s2.charAt(i) == '1') {
-                cnt2++;
-            }
             if (s1.charAt(i) != s2.charAt(i)) {
                 list.add(i);
             }
         }
-        if (Math.abs(cnt1- cnt2) % 2 != 0) {
+        if (list.size() % 2 != 0) {
             return -1;
         }
         if (list.size() == 0) {
@@ -53,60 +45,4 @@ public class MinOperations1 {
         }
         return res[res.length- 1];
     }
-   /* public static int minOperations(String s1, String s2, int x) {
-        int cnt1 = 0;
-        int cnt2 = 0;
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < s1.length(); i++) {
-            if (s1.charAt(i) == '1') {
-                cnt1++;
-            }
-            if (s2.charAt(i) == '1') {
-                cnt2++;
-            }
-            if (s1.charAt(i) != s2.charAt(i)) {
-                list.add(i);
-            }
-        }
-        if (Math.abs(cnt1- cnt2) % 2 != 0) {
-            return -1;
-        }
-        int cnt = 0;
-        if (list.size() == 0) {
-            return 0;
-        }
-        Set<Integer> set = new HashSet<>();
-        for (int i = 1; i < list.size();) {
-            Integer currentIndex = list.get(i);
-            Integer lastIndex = list.get(i - 1);
-            if (currentIndex - lastIndex < x) {
-                cnt += currentIndex - lastIndex;
-                i+=2;
-            }else {
-                set.add(i - 1);
-                set.add(i);
-                i++;
-            }
-        }
-        cnt+= set.size() / 2 * x;
-
-        //
-        int cnt11 = 0;
-
-        Set<Integer> set1 = new HashSet<>();
-        for (int i = list.size() - 2; i >=0;) {
-            Integer currentIndex = list.get(i);
-            Integer lastIndex = list.get(i + 1);
-            if (lastIndex - currentIndex < x) {
-                cnt11 += lastIndex - currentIndex;
-                i-=2;
-            }else {
-                set1.add(i - 1);
-                set1.add(i);
-                i--;
-            }
-        }
-        cnt11+= set1.size() / 2 * x;
-        return Math.min(cnt, cnt11);
-    }*/
 }

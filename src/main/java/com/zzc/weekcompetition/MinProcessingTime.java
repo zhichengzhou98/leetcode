@@ -13,12 +13,11 @@ public class MinProcessingTime {
         processorTime.sort(Integer::compareTo);
         //降序
         tasks.sort((a, b)-> b- a);
-        int j = 0;
         int minTime = Integer.MIN_VALUE;
         for (int i = 0; i < processorTime.size(); i++) {
-            Integer integer = processorTime.get(i);
-            Integer integer1 = tasks.get(4 * i);
-            minTime = Math.max(minTime, integer + integer1);
+            Integer processor = processorTime.get(i);
+            Integer task = tasks.get(4 * i);
+            minTime = Math.max(minTime, processor + task);
         }
         return minTime;
     }

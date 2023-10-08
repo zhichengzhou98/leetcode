@@ -21,4 +21,11 @@ public class DifferenceOfSums {
         }
         return sum2 - sum1;
     }
+
+    public static int differenceOfSums1(int n, int m) {
+        int k =  n / m;
+        int s = ( 1 + n ) * n / 2;
+
+        return s - k * m * (k + 1);
+    }
 }
