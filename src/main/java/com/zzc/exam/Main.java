@@ -21,113 +21,22 @@ public class Main {
         for (int i = 0; i < s2.length; i++) {
             cyxl[i] = Integer.parseInt(s2[i]);
         }
-        Arrays.sort(cyxl);//将采样效率排序
-        if(cy == 1){
-            //只有一个采样员
-            if(zyz == 0){
-                System.out.println(cyxl[0] - 0.2*cyxl[0]);
-            }
-            if(zyz == 1){
-                System.out.println(cyxl[0]);
-            }else if(zyz <=4){
-                System.out.println(cyxl[0] + (zyz - 1)*cyxl[0]*0.1);
-            }else {
-                System.out.println(1.3*cyxl[0]);
-            }
-        }
-        List<int[]> list = new ArrayList<>();//链表每个元素代表一组采样员与志愿者
+        //最大堆
+        Queue<Double> pq = new PriorityQueue<>(Comparator.comparingDouble(a -> -a));
+        //遍历采样效率
+        double sum = 0;
         for (int i = 0; i < cyxl.length; i++) {
-            int[] ints1 = new int[2];
-            ints1[0] = cyxl[cyxl.length-1-i];
-            list.add(ints1);
+            sum += cyxl[i] * 0.8;
+            pq.offer(0.2 * cyxl[i]);
+            pq.offer(0.1 * cyxl[i]);
+            pq.offer(0.1 * cyxl[i]);
+            pq.offer(0.1 * cyxl[i]);
         }
-        int i = 0;
-        int j = 1;
-        while (true){
-            if(j>=list.size()){
-                while (i < list.size()){
-                    if(zyz == 0){
-                        break;
-                    }
-                    int[] ints = list.get(i);
-                    int anInt = ints[1];
-                    if(anInt == 4){
-                        i++;
-                    }else {
-                        int sy = 4- anInt;
-                        if(zyz <= sy ){
-                            ints[1] = zyz + anInt;
-                            zyz = 0;
-                        }else {
-                            ints[1] = 4;
-                            zyz =zyz-anInt;
-                        }
-                    }
-                }
+        while (!pq.isEmpty() && zyz > 0) {
+            sum += pq.poll();
+            zyz--;
+        }
 
-                break;
-            }
-            if(zyz == 0){
-                break;
-            }
-            int[] group1 = list.get(i);
-            int[] group2 = list.get(j);
-            int cyx1 = group1[0];
-            int zyz1 = group1[1];
-            int cyx2 = group2[0];
-            int zyz2 = group2[1];
-            if(zyz1 == 4){
-                i++;
-                if(j == i){
-                    j++;
-                }
-                break;
-            }
-            if(cyx1 >= 2 * cyx2){
-
-                int sy = 4 - zyz1;
-                //志愿者优先全分给采样员1
-                if(zyz <= sy ){
-                    group1[1] = zyz + zyz1;
-                    zyz = 0;
-                }else {
-                    group1[1] = 4;
-                    zyz =zyz-zyz1;
-                }
-            }else {
-                group1[1] = group1[1] + 1;
-                zyz = zyz - 1;
-                if(zyz ==0){
-                    return;
-                }else {
-                    group2[1] = group2[1] + 1;
-                    zyz = zyz - 1;
-                    j++;
-                }
-            }
-        }
-        double res = 0;
-        for (int[] ints : list) {
-            double v = tongJi(ints);
-            res += v;
-        }
-        System.out.println((int)res);
+        System.out.println((int) sum);
     }
-
-    //统计每组核酸检测效率
-    public static double tongJi(int[] group){
-        int zyz = group[1];
-        int cyxl = group[0];
-        if(zyz == 0){
-            return cyxl - 0.2 * cyxl;
-        }else if(zyz == 1){
-
-            return cyxl;
-        }else if(zyz <=4){
-            return (cyxl+ (zyz - 1)*cyxl*0.1);
-        }else {
-            return 1.3*cyxl;
-        }
-    }
-
 }
