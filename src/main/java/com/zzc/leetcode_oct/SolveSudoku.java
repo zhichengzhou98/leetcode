@@ -98,14 +98,17 @@ public class SolveSudoku {
             //当前位置填充字符c
             board[x][y] = c;
             //递归
-            dfs(stack, board);
+            Stack<int[]> objects = new Stack<>();
+            objects.addAll(stack);
+            //TODO: 为啥要重新new？？？
+            dfs(objects, board);
             if (flag) {
                 //递归结束 填充完成
                 return;
             }
-            board[x][y] = '.';
+            //board[x][y] = '.';
         }
         //回溯
-        //board[x][y] = '.';
+        board[x][y] = '.';
     }
 }
