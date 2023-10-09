@@ -1,5 +1,6 @@
 package com.zzc.weekcompetition;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class MinProcessingTime {
         //升序
         processorTime.sort(Integer::compareTo);
         //降序
-        tasks.sort((a, b)-> b- a);
+        tasks.sort(Comparator.comparingInt(x -> -x));
         int minTime = Integer.MIN_VALUE;
         for (int i = 0; i < processorTime.size(); i++) {
             Integer processor = processorTime.get(i);
