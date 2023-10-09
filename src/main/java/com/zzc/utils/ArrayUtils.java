@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class ArrayUtils {
     public static <T> T generate(String key, Class<?>... types) throws IOException {
         Properties properties = loadProperties();
-        String arrayStr = properties.getProperty(key);
+        String arrayStr = properties.getProperty(key).replace("\"", "");
 
         if (types.length == 1) {
             Class<?> type1 = types[0];
@@ -24,6 +24,8 @@ public class ArrayUtils {
                 return (T) parse2DIntArray(arrayStr);
             } else if (type1 == int[].class) {
                 return (T) parse1DIntArray(arrayStr);
+            }else if (type1 == char[][].class) {
+                return (T)parse2DCharArray(arrayStr);
             }
         } else if (types.length == 2) {
             Class<?> type1 = types[0];
@@ -58,6 +60,28 @@ public class ArrayUtils {
                 .map(arr -> arr.substring(1, arr.length() - 1).split(","))
                 .map(subArray -> Arrays.stream(subArray).mapToInt(Integer::parseInt).toArray())
                 .toArray(int[][]::new);
+    }
+
+    private static char[][] parse2DCharArray(String arrayStr) {
+        // 解析二维数组
+        Character[][] characters = parse2DCharacterArray(arrayStr);
+        char[][] res = new char[characters.length][];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = new char[characters[i].length];
+            for (int j = 0; j < characters[i].length; j++) {
+                res[i][j] = characters[i][j];
+            }
+        }
+        return res;
+    }
+
+    private static Character[][] parse2DCharacterArray(String arrayStr) {
+        // 解析二维数组
+        String[] arrays = arrayStr.substring(1, arrayStr.length() - 1).replace("],[", "];[").split(";");
+        return Arrays.stream(arrays)
+                .map(arr -> arr.substring(1, arr.length() - 1).split(","))
+                .map(subArray -> Arrays.stream(subArray).map(s->s.charAt(0)).toArray(Character[]::new))
+                .toArray(Character[][]::new);
     }
 
     private static int[] parse1DIntArray(String arrayStr) {
