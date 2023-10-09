@@ -13,6 +13,38 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String peopleNum = scanner.nextLine();
         String[] s = peopleNum.split(" ");
+        int zyz = Integer.parseInt(s[1]);//志愿者人数
+        String s1 = scanner.nextLine();
+        String[] s2 = s1.split(" ");
+        Integer[] cyxl = new Integer[s2.length];//采用人员效率
+        for (int i = 0; i < s2.length; i++) {
+            cyxl[i] = Integer.parseInt(s2[i]);
+        }
+
+        List<Double> list = new ArrayList<>();
+        //遍历采样效率
+        double sum = 0;
+        for (int i = 0; i < cyxl.length; i++) {
+            sum += cyxl[i] * 0.8;
+            list.add(0.2 * cyxl[i]);
+            list.add(0.1 * cyxl[i]);
+            list.add(0.1 * cyxl[i]);
+            list.add(0.1 * cyxl[i]);
+        }
+        list.sort(Double::compareTo);
+        int j = list.size() - 1;
+        while (j >= 0 && zyz > 0) {
+            sum += list.get(j);
+            j--;
+            zyz--;
+        }
+        System.out.println((int) sum);
+    }
+
+    /*public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String peopleNum = scanner.nextLine();
+        String[] s = peopleNum.split(" ");
         int cy = Integer.parseInt(s[0]);//采样人员数
         int zyz = Integer.parseInt(s[1]);//志愿者人数
         String s1 = scanner.nextLine();
@@ -38,5 +70,5 @@ public class Main {
         }
 
         System.out.println((int) sum);
-    }
+    }*/
 }
