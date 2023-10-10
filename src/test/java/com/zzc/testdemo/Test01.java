@@ -120,4 +120,14 @@ public class Test01 {
         String des = str.replace("[", "{").replace("]", "}");
         System.out.println(des);
     }
+
+    @Test
+    public void setRemove() {
+        Set<Integer> des = new HashSet<>(Set.of(1));
+        des.remove(1);
+        for (int i :des) {
+            System.out.println(i);
+        }
+        System.out.println(des);
+    }
 }

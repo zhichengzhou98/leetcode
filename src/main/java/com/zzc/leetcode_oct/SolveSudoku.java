@@ -90,25 +90,21 @@ public class SolveSudoku {
             int[] posInCell = poss.get(i);
             set.remove(board[posInCell[0]][posInCell[1]]);
         }
-        if (set.isEmpty()) {
-            //没有元素可以填充
-            return;
-        }
         for (Character c : set) {
             //当前位置填充字符c
             board[x][y] = c;
             //递归
-            Stack<int[]> objects = new Stack<>();
-            objects.addAll(stack);
+            /*Stack<int[]> objects = new Stack<>();
+            objects.addAll(stack);*/
             //TODO: 为啥要重新new？？？
-            dfs(objects, board);
+            dfs(stack, board);
             if (flag) {
                 //递归结束 填充完成
                 return;
             }
-            //board[x][y] = '.';
         }
         //回溯
         board[x][y] = '.';
+        stack.push(pos);
     }
 }
