@@ -2,7 +2,7 @@ package com.zzc.leetcode_oct;
 
 /**
  * @author zc.zhou
- * @Description
+ * @Description TODO: 764. 最大加号标志 DP
  * @create 2023-10-10 21:13
  */
 public class OrderOfLargestPlusSign {
@@ -26,9 +26,7 @@ public class OrderOfLargestPlusSign {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 int current = grid[i][j];
-                if (current == 1) {
-                    continue;
-                }else {
+                if (current == 0) {
                     //至少有一个点满足
                     res = Math.max(res, 1);
                     int maxRes1 = findMaxRes(i, j, n - 1, grid, res);
