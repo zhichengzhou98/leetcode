@@ -130,4 +130,20 @@ public class Test01 {
         }
         System.out.println(des);
     }
+
+    @Test
+    public void test2() {
+        ArrayList<Integer> res = new ArrayList<>(List.of(4, 1, 2));
+        int n = 7;
+        long cnt = 0L;
+        for (int i = 1; i < res.size(); i++) {
+            Integer pre = res.get(i - 1);
+            n = n - pre;
+            cnt = cnt + (long)pre * n;
+        }
+        System.out.println(cnt);
+    }
+
+
+
 }

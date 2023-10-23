@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author zc.zhou
- * @Description "11000111"
+ * @Description "11000111" TODO 滑动窗口
  * @create 2023-10-18 21:33
  */
 public class ShortestBeautifulSubstring {
