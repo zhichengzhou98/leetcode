@@ -1,5 +1,7 @@
 package com.zzc.leetcode_oct;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 
 /**
@@ -14,15 +16,22 @@ public class MaxArea {
         System.out.println(mA.maxArea(1000000000, 1000000000, new int[]{2}, new int[]{2}));
     }
 
+    @Test
+    public void testMaxArea() {
+        System.out.println(Long.MAX_VALUE);
+        System.out.println((long) MOD * MOD);
+        System.out.println(maxArea(1000000000, 1000000000, new int[]{2}, new int[]{2}));
+    }
+
     private static int MOD = (int) (Math.pow(10, 9) + 7);
     public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {
-        long area = (maxDiff(h, horizontalCuts) * maxDiff(w, verticalCuts)) % MOD;
+        long area = ((long) maxDiff(h, horizontalCuts) * maxDiff(w, verticalCuts)) % MOD;
         return (int) area;
     }
 
-    public long maxDiff(int h, int[] horizontalCuts) {
+    public int maxDiff(int h, int[] horizontalCuts) {
         Arrays.sort(horizontalCuts);
-        long maxDiffH = horizontalCuts[0];
+        int maxDiffH = horizontalCuts[0];
         for (int i = 1; i < horizontalCuts.length; i++) {
             maxDiffH = Math.max(maxDiffH, horizontalCuts[i] - horizontalCuts[i - 1]);
         }
