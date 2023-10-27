@@ -15,7 +15,7 @@ public class BeautifulString {
     public static final int MOD = 998244353;
 
     public int beautifulString(String s) {
-        double res = 0;
+        long res = 0;
         int cntOne = 0;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '1') {
@@ -27,13 +27,12 @@ public class BeautifulString {
         return (int) res;
     }
 
-    public double calBeautifulCnt(String s, int cntOne, char lastChar) {
+    public long calBeautifulCnt(String s, int cntOne, char lastChar) {
         int len = s.length();
         int newLen = 2 * len - 1;
         int blank = newLen - len;
-        double res = 0;
+        long res = 0;
         if (lastChar == '1') {
-            // 1 的个数至少为 len
             cntOne = len - cntOne;
         }
         for (int i = cntOne; i <= blank; i++) {
@@ -42,10 +41,10 @@ public class BeautifulString {
         return res;
     }
 
-    public double zuHe(int num1, int num2) {
+    public long zuHe(int num1, int num2) {
         int min = Math.min(num2, num1 - num2);
         int temp = min;
-        double res = 1.0;
+        long res = 1;
         while (min > 0) {
             res = res * num1;
             num1--;
