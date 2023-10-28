@@ -11,6 +11,7 @@ import java.util.Map;
 public class BeautifulString {
     public static void main(String[] args) {
         BeautifulString bS = new BeautifulString();
+
         //954957892
         System.out.println(bS.beautifulString("0100111000100001111101111011010011110101001101110111001101110000110001110101110000000000010101111110"));
         System.out.println(bS.beautifulString("11"));
@@ -19,10 +20,18 @@ public class BeautifulString {
     }
     public static final int MOD = 998244353;
 
+    Map<Integer, Integer> jieChengMap;
+
     public int beautifulString(String s) {
-        zuHeMap = new HashMap<>();
+        jieChengMap = new HashMap<>();
         long res = 0;
         int cntOne = 0;
+        long lastJieCheng = 1;
+        jieChengMap.put(0, 1);
+        for (int i = 1; i < s.length(); i++) {
+            lastJieCheng = lastJieCheng * i % MOD;
+            jieChengMap.put(i, (int)lastJieCheng);
+        }
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '1') {
                 cntOne++;
@@ -62,28 +71,15 @@ public class BeautifulString {
         return result;
     }
 
-    Map<String, Integer> zuHeMap;
-    // 计算组合数C(n, k)对MOD取模
+    // 计算组合数C(n, k)对MOD取模  n!/(k! * (n - k)!)
     public long zuHe(int n, int k) {
-        k = Math.min(k, n - k);
-        String key = n + "," + k;
-        if (zuHeMap.containsKey(key)) {
-            return zuHeMap.get(key);
-        }
-        if (k == 0) {
-            zuHeMap.put(key, 1);
-            return 1;
-        }
-        long num = 1;
-        long den = 1;
-        for (int i = 0; i < k; i++) {
-            num = (num * (n - i)) % MOD;
-            den = (den * (i + 1)) % MOD;
-        }
-        long res = (num * modInverse(den)) % MOD;
-        zuHeMap.put(key, (int)res);
+
+        long fenZi = jieChengMap.get(n);
+        long fenMu = (long) jieChengMap.get(k) * jieChengMap.get(n - k) % MOD;
+        long res = (fenZi * modInverse(fenMu)) % MOD;
         return res;
     }
+    //求逆元
     public  long modInverse(long x) {
         return modPow(x, MOD - 2);
     }
