@@ -1,5 +1,6 @@
 package com.zzc.leetcode_nov;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,5 +21,28 @@ public class CountPairs {
             }
         }
         return res;
+    }
+
+    public int countPairsV2(List<Integer> nums, int target) {
+        Collections.sort(nums);
+        int res = 0;
+        int last = nums.size()-1;
+        for (int i = 0; i < nums.size(); i++) {
+            int num1 = nums.get(i);
+            int num2 = target - num1;
+            for (int j = last; j >= 0 ; j--) {
+                int numJ = nums.get(j);
+                if (numJ < num2) {
+                    if (j >= i) {
+                        res = res + j + 1 - 1;
+                    }else {
+                        res = res + j + 1;
+                    }
+                    last = j;
+                    break;
+                }
+            }
+        }
+        return res/2;
     }
 }
