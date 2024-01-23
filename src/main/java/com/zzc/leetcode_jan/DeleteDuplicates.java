@@ -6,6 +6,7 @@ package com.zzc.leetcode_jan;
  * @create 2024-01-14 21:04
  */
 public class DeleteDuplicates {
+
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null || head.next == null) {
             return head;
@@ -14,7 +15,7 @@ public class DeleteDuplicates {
         while (current != null && current.next != null) {
             if (current.val == current.next.val) {
                 current.next = current.next.next;
-            }else {
+            } else {
                 current = current.next;
             }
 
