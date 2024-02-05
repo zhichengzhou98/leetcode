@@ -1,6 +1,6 @@
 package com.zzc.exam;
 
-import com.zzc.Utils;
+
 
 /**
  * @author zzc
@@ -14,7 +14,7 @@ public class Demo17 {
         System.out.println(arrangeCoins(8));
         System.out.println(arrangeCoins(9));*/
         System.out.println(arrangeCoins(1804289383));
-        Utils.printHelloWorld();
+        //Utils.printHelloWorld();
     }
     public static int arrangeCoins(int n) {
         long res = (long) Math.floor(Math.sqrt((long)2 * n));

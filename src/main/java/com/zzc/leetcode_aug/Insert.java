@@ -2,6 +2,7 @@ package com.zzc.leetcode_aug;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntFunction;
 
 /**
  * @author zc.zhou
@@ -44,7 +45,7 @@ public class Insert {
                 dest = curr;
             }
         }
-        return list.toArray(int[][]::new);
+        return list.toArray(new int[0][]);
     }
 
 }
