@@ -1,6 +1,5 @@
 package com.zzc.leetcode_mar;
 
-import com.zzc.backtracking.IsAdditiveNumber;
 import com.zzc.utils.ArrayUtils;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
@@ -115,9 +113,8 @@ public class FindMinHeightTrees {
             res.put(i,  minDepth(i, nodeMap, visited));
         }
         Integer i = res.values().stream().min(Integer::compareTo).get();
-        List<Integer> collect = res.keySet().stream().filter(key -> res.get(key).intValue() == i)
+        return res.keySet().stream().filter(key -> res.get(key).intValue() == i)
             .collect(Collectors.toList());
-        return collect;
     }
 
 
