@@ -1,6 +1,8 @@
 package com.zzc.leetcode_may;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Stack;
 
 /**
@@ -16,6 +18,25 @@ public class DailyTemperatures {
     }
 
     public int[] dailyTemperatures(int[] temperatures) {
+        //单调栈
+        int[] res = new int[temperatures.length];
+        Deque<int[]> stack = new ArrayDeque<>();
+        for (int i = temperatures.length - 1; i >= 0; i--) {
+
+            while (!stack.isEmpty() && stack.peek()[0] <= temperatures[i]) {
+                stack.pop();
+            }
+            if (stack.isEmpty()) {
+                res[i] = 0;
+            } else {
+                res[i] = stack.peek()[1] - i;
+            }
+            stack.push(new int[]{temperatures[i], i});
+        }
+        return res;
+    }
+
+    public int[] dailyTemperatures1(int[] temperatures) {
         //单调栈
         int[] res = new int[temperatures.length];
         Stack<int[]> stack = new Stack<>();
