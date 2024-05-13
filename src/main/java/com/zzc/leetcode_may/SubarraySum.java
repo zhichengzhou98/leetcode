@@ -1,5 +1,7 @@
 package com.zzc.leetcode_may;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -11,7 +13,7 @@ public class SubarraySum {
 
     @Test
     public void test() {
-        System.out.println(subarraySum1(new int[]{1, 1, 1}, 1));
+        System.out.println(subarraySum(new int[]{1, 1, 1}, 2));
     }
 
     public int subarraySum1(int[] nums, int k) {
@@ -31,19 +33,19 @@ public class SubarraySum {
         return res;
     }
 
-    //前缀和 + hash优化 todo
+    //前缀和 + hash优化
     public int subarraySum(int[] nums, int k) {
         int res = 0;
         int[] prefixSum = new int[nums.length + 1];
         for (int i = 1; i < prefixSum.length; i++) {
             prefixSum[i] = prefixSum[i-1] + nums[i-1];
         }
-        for (int i = 1; i < prefixSum.length; i++) {
-            for (int j = 0; j < i; j++) {
-                if (prefixSum[i] - prefixSum[j] == k) {
-                    res++;
-                }
-            }
+        Map<Integer, Integer> valueCntsMap = new HashMap<>();
+        //valueCntsMap.put(0, 1);
+        for (int i = 0; i < prefixSum.length; i++) {
+            int target =prefixSum[i] - k;
+            res += valueCntsMap.getOrDefault(target, 0);
+            valueCntsMap.put(prefixSum[i], valueCntsMap.getOrDefault(prefixSum[i], 0) + 1);
         }
         return res;
     }
