@@ -13,7 +13,7 @@ public class MaxLengthSequence {
 
     @Test
     public void testFun() {
-        System.out.println(maxLengthSequence("anviaj"));
+        System.out.println(maxLengthSequence("bbbbb"));
     }
 
     public int maxLengthSequence(String s) {
@@ -23,17 +23,18 @@ public class MaxLengthSequence {
         int maxRes = 1;
         int left = 0;
         Set<Character> set = new HashSet<>();
-        set.add(s.charAt(left));
-        for (int i = 1; i < s.length(); i++) {
-            //枚举右端点
-            while (set.contains(s.charAt(i))) {
+        for (int right = 0; right < s.length(); right++) {
+            char current = s.charAt(right);
+            if (!set.contains(current)) {
+                set.add(current);
+                maxRes = Math.max(maxRes, right - left + 1);
+                continue;
+            }
+            while (s.charAt(left) != current) {
                 set.remove(s.charAt(left));
                 left++;
-                set.add(s.charAt(i));
             }
-            if (i < s.length()) {
-                maxRes = Math.max(maxRes, i - left + 1);
-            }
+            left++;
         }
         return maxRes;
     }
