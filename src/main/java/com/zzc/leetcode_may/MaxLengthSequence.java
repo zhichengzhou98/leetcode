@@ -25,6 +25,7 @@ public class MaxLengthSequence {
         Set<Character> set = new HashSet<>();
         for (int right = 0; right < s.length(); right++) {
             char current = s.charAt(right);
+            //求最大长度，不断将right右移，直到不满足条件
             if (!set.contains(current)) {
                 set.add(current);
                 maxRes = Math.max(maxRes, right - left + 1);
@@ -34,6 +35,7 @@ public class MaxLengthSequence {
                 set.remove(s.charAt(left));
                 left++;
             }
+            //此时s.charAt(left) == current, 只需要将left+1, current已经存在于set中
             left++;
         }
         return maxRes;
