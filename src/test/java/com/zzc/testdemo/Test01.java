@@ -2,6 +2,7 @@ package com.zzc.testdemo;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -143,7 +144,43 @@ public class Test01 {
         }
         System.out.println(cnt);
     }
+    @Test
+    public void test3() {
+        Integer a = 100;
+        Integer b = 101;
+        System.out.println(a.compareTo(b));
+    }
+
+    @Test
+    public void testBigDecimal() {
+        BigDecimal num1 = new BigDecimal("1.00");
+        BigDecimal num2 = new BigDecimal("1.0");
+        TreeSet<BigDecimal> set = new TreeSet<>();
+        set.add(num1);
+        System.out.println(set.contains(num2));
+        System.out.println(num1.compareTo(num2));
+
+    }
+
+    @Test
+    public void testTreeSet() {
+        Student s1 = new Student(1, "zc");
+        Student s2 = new Student(2, "ac");
+        TreeSet<Student> set = new TreeSet<>();
+        set.add(s1);
+        //System.out.println(set.contains(s2));
+
+    }
 
 
+}
 
+class Student {
+    int score;
+    String name;
+
+    public Student(int score, String name) {
+        this.score = score;
+        this.name = name;
+    }
 }
