@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -21,22 +22,40 @@ public class MinimumDistance {
     System.out.println(minimumDistance(points));
   }
 
+  //TODO: o(n)
   public int minimumDistance(int[][] points) {
+    return 0;
+  }
+
+  public int minimumDistance1(int[][] points) {
     points = Arrays.stream(points).map(point -> new int[]{point[0] + point[1],
         point[0] - point[1]}).toArray(int[][]::new);
     System.out.println(Arrays.deepToString(points));
-    Arrays.sort(points, (a, b) -> {
-      if (a[0] == b[0]) {
-        return a[1] - b[1];
+    TreeMap<Integer, Integer> xCountMap = new TreeMap<>();
+    TreeMap<Integer, Integer> yCountMap = new TreeMap<>();
+    for (int[] point : points) {
+      xCountMap.put(point[0], xCountMap.getOrDefault(point[0], 0) + 1);
+      yCountMap.put(point[1], yCountMap.getOrDefault(point[1], 0) + 1);
+    }
+    int res = Integer.MAX_VALUE;
+    //枚举移除每个点
+    for (int[] point : points) {
+      int x = point[0];
+      xCountMap.put(x, xCountMap.get(x) - 1);
+      if (xCountMap.get(x) == 0) {
+        xCountMap.remove(x);
       }
-      return a[0] - b[0];
-    });
-    System.out.println(Arrays.deepToString(points));
-    int[] first = points[0];
-    int[] second = points[1];
-    int[] third = points[points.length - 2];
-    int[] forth = points[points.length - 1];
-    return Math.min(getChebyshevDistance(first, third), getChebyshevDistance(second, forth));
+      int y = point[1];
+      yCountMap.put(y, yCountMap.get(y) - 1);
+      if (yCountMap.get(y) == 0) {
+        yCountMap.remove(y);
+      }
+      res = Math.min(res, Math.max(xCountMap.lastKey() - xCountMap.firstKey(),
+          yCountMap.lastKey() - yCountMap.firstKey()));
+      xCountMap.put(x, xCountMap.getOrDefault(x, 0) + 1);
+      yCountMap.put(y, yCountMap.getOrDefault(y, 0) + 1);
+    }
+    return res;
   }
 
   private int getManhattanDistance(int[] begin, int[] end) {
