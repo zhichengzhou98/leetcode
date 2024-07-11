@@ -10,12 +10,17 @@ import org.junit.jupiter.api.Test;
 public class IncremovableSubarrayCount {
   @Test
   void testFun() {
-    System.out.println(incremovableSubarrayCount(new int[]{1, 2, 3, 4}));
+    System.out.println(incremovableSubarrayCount1(new int[]{1, 2, 3, 4}));
+  }
+
+  public int incremovableSubarrayCount(int[] nums) {
+    return 0;
   }
 
 
+
   //o(n³)
-  public int incremovableSubarrayCount(int[] nums) {
+  public int incremovableSubarrayCount1(int[] nums) {
     int res = 0;
     for (int i = 1; i <= nums.length; i++) {
       //移除元素的个数i
