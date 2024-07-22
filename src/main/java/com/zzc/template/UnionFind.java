@@ -30,6 +30,19 @@ public class UnionFind {
     return parent[x];
   }
 
+  /**
+   *
+   * @param x
+   * @param y
+   */
+  public void unionV2(int x, int y) {
+    //直接合并 可能会导致树退化为链表
+    int rootX = find(x);
+    int rootY = find(y);
+    count[rootY] += count[rootX];
+    parent[rootX] = rootY;
+  }
+
   // 合并两个节点x和y所在的集合
   public void union(int x, int y) {
     int rootX = find(x);
