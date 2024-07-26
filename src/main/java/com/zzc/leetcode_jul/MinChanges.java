@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author zc.zhou
- * @Description
+ * @Description 位运算
  * @create 2024-07-26 15:30
  */
 public class MinChanges {
@@ -14,6 +14,10 @@ public class MinChanges {
   }
 
   public int minChanges(int n, int k) {
+    return (n & k) != k ? -1 : Integer.bitCount(n - k);
+  }
+
+  public int minChangesV2(int n, int k) {
     int res = 0;
     while (n > 0 && k > 0) {
       int temp1 = n % 2;
