@@ -2,7 +2,7 @@ package com.zzc.template;
 
 /**
  * @author zc.zhou
- * @Description 并查集
+ * @Description 并查集 基于树高度rank的优化
  * @create 2024-07-22 9:37
  */
 public class UnionFind {
