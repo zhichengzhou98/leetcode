@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 /**
  * @author zc.zhou
- * @Description
+ * @Description LCR 40心算挑战
  * @create 2024-08-01 11:04
  */
 public class MaxmiumScore {
