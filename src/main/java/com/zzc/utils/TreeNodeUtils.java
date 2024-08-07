@@ -1,31 +1,31 @@
 package com.zzc.utils;
 
-import java.io.IOException;
+import org.junit.jupiter.api.Test;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Stack;
 
 /**
  * @author zc.zhou
  * @Description 2.生成逻辑问题 按层遍历，生成树
+ * 使用ArrayDeque 代替Stack, 但是不能存null
+ * Stack LinkedList 可以存空值
  * @create 2024-08-07 16:09
  */
 public class TreeNodeUtils {
-  public static void main(String[] args) throws IOException {
-    List<Integer> arr = new ArrayList<>();
-    arr.add(1);
-    arr.add(null);
-    arr.add(2);
-    arr.add(3);
-    System.out.println(arr.size());
-    Stack<Integer> stack = new Stack<>();
-    for (int i = arr.size() - 1; i >= 0; i--) {
-      stack.push(arr.get(i));
-    }
-    TreeNode treeNode = generate(stack, TreeNode.class, Integer.class);
+  @Test
+  void testArrayDequePushNull() {
+    Deque<Integer> arr = new ArrayDeque<>();
+    arr.push(null);
+  }
+  public static void main(String[] args) {
+    TreeNode treeNode = generate("array", TreeNode.class, Integer.class);
     System.out.println(treeNode);
   }
 
@@ -33,16 +33,13 @@ public class TreeNodeUtils {
   }
 
   //[1, null, 2, 3]
-  public static <T> T generate(Stack<Integer> array, Class<T> treeClass, Class<?> elementClass) throws IOException {
+  public static <T> T generate(String key, Class<T> treeClass, Class<?> elementClass) {
     try {
-      //
+      Deque<Integer> array = ArrayUtils.generate(key, Deque.class, elementClass);
       Constructor<T> constructor = treeClass.getDeclaredConstructor();
       constructor.setAccessible(true); // Make the constructor accessible
-      return buildTree(array, 0, constructor, treeClass, elementClass);
-    } catch (NoSuchMethodException e) {
-      throw new IOException("TreeNode class must have a constructor with a single value parameter"
-          + ".", e);
-    } catch (NoSuchFieldException e) {
+      return buildTree(array, constructor, treeClass, elementClass);
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -65,10 +62,11 @@ public class TreeNodeUtils {
     return node;
   }
 
-  private static <T> T buildTree(Stack<Integer> array, int index, Constructor<T> constructor,
-                                 Class<T> treeClass, Class<?> elementClass) throws IOException,
-      NoSuchFieldException {
-    if (index >= array.size() || array.get(index) == null) {
+  private static <T> T buildTree(Deque<Integer> array, Constructor<T> constructor,
+                                 Class<T> treeClass, Class<?> elementClass) throws Exception,
+      IllegalAccessException {
+    //check first element -> root
+    if (array.isEmpty() || array.peek() == null) {
       return null;
     }
     // 获取名为 "val" 的字段
@@ -80,48 +78,39 @@ public class TreeNodeUtils {
     left.setAccessible(true);
     right.setAccessible(true);
 
+    Integer rootVal = array.pop();
+
+    T root = generateSingleNode(rootVal, constructor, treeClass, elementClass);
 
     //已经创建好node的集合 某一层的树的节点
-    Stack<Integer> nodeStack = new Stack<>();
-    nodeStack.push(array.pop());
-    try {
+    Stack<T> nodeStack = new Stack<>();
+    nodeStack.push(root);
 
-      T root = null;
-      while (!nodeStack.isEmpty()) {
-        //栈顶元素弹出
-        Integer pop = nodeStack.pop();
-        if (pop != null) {
-          T currentNode = generateSingleNode(pop, constructor, treeClass, elementClass);
-          if (root == null) {
-            root = currentNode;
-          }
-          //构建左右节点
-          if (!array.isEmpty()) {
-            Integer leftValue = array.pop();
-            //左节点加入 nodeStack
-            nodeStack.push(leftValue);
-            T leftNode = generateSingleNode(leftValue, constructor, treeClass, elementClass);
-            left.set(currentNode, leftNode);
-          } else {
-            break;
-          }
-          if (!array.isEmpty()) {
-            Integer rightValue = array.pop();
-            //左节点加入 nodeStack
-            nodeStack.push(rightValue);
-            T rightNode = generateSingleNode(rightValue, constructor, treeClass, elementClass);
-            right.set(currentNode, rightNode);
-          } else {
-            break;
-          }
+    while (!array.isEmpty()) {
+      //栈顶元素弹出
+      if (nodeStack.isEmpty()) {
+        break;
+      }
+      T currentNode = nodeStack.pop();
+      if (currentNode != null) {
+        //构建左右节点
+        if (!array.isEmpty()) {
+          Integer leftValue = array.pop();
+          T leftNode = generateSingleNode(leftValue, constructor, treeClass, elementClass);
+          left.set(currentNode, leftNode);
+          //左节点加入 nodeStack
+          nodeStack.push(leftNode);
+        }
+        if (!array.isEmpty()) {
+          Integer rightValue = array.pop();
+          T rightNode = generateSingleNode(rightValue, constructor, treeClass, elementClass);
+          right.set(currentNode, rightNode);
+          //右节点加入 nodeStack
+          nodeStack.push(rightNode);
         }
       }
-
-      return root;
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-             NoSuchFieldException e) {
-      throw new IOException("Failed to create tree node.", e);
     }
+    return root;
   }
 }
 
