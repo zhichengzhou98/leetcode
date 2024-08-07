@@ -1,6 +1,6 @@
 package com.zzc.leetcode_jul;
 
-import com.zzc.template.UnionFind;
+import com.topic.template.UnionFind;
 import com.zzc.utils.ArrayUtils;
 
 import org.junit.jupiter.api.Test;

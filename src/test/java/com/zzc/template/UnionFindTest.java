@@ -1,8 +1,8 @@
 package com.zzc.template;
 
-import org.junit.jupiter.api.Test;
+import com.topic.template.UnionFind;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author zc.zhou

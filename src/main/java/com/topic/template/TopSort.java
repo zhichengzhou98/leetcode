@@ -1,4 +1,4 @@
-package com.zzc.template;
+package com.topic.template;
 
 import java.util.ArrayList;
 import java.util.List;
