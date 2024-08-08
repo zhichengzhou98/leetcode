@@ -4,11 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -24,8 +21,9 @@ public class TreeNodeUtils {
     Deque<Integer> arr = new ArrayDeque<>();
     arr.push(null);
   }
+
   public static void main(String[] args) {
-    TreeNode treeNode = generate("array", TreeNode.class, Integer.class);
+    TreeNode treeNode = generate("array", TreeNode.class, String.class);
     System.out.println(treeNode);
   }
 
@@ -33,19 +31,17 @@ public class TreeNodeUtils {
   }
 
   //[1, null, 2, 3]
-  public static <T> T generate(String key, Class<T> treeClass, Class<?> elementClass) {
+  public static <T, E> T generate(String key, Class<T> treeClass, Class<E> elementClass) {
     try {
-      Deque<Integer> array = ArrayUtils.generate(key, Deque.class, elementClass);
-      Constructor<T> constructor = treeClass.getDeclaredConstructor();
-      constructor.setAccessible(true); // Make the constructor accessible
-      return buildTree(array, constructor, treeClass, elementClass);
+      Deque<E> array = ArrayUtils.generate(key, Deque.class, elementClass);
+      return buildTree(array, treeClass, elementClass);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  private static <T> T generateSingleNode(Integer value, Constructor<T> constructor,
-                                          Class<T> treeClass, Class<?> elementClass) throws NoSuchFieldException, InvocationTargetException, InstantiationException, IllegalAccessException {
+  private static <T, E> T generateSingleNode(E value,
+                                             Class<T> treeClass, Class<E> elementClass) throws Exception {
     if (value == null) {
       return null;
     }
@@ -53,18 +49,19 @@ public class TreeNodeUtils {
     Field val = treeClass.getDeclaredField("val");
     // 使字段可访问，即使它是私有的
     val.setAccessible(true);
+    Constructor<T> constructor = treeClass.getDeclaredConstructor();
+    constructor.setAccessible(true); // Make the constructor accessible
     T node = constructor.newInstance();
     if (elementClass == Integer.class || elementClass == int.class) {
-      val.setInt(node, value);
+      val.setInt(node, (Integer) value);
     } else if (elementClass == String.class) {
       val.set(node, String.valueOf(value));
     }
     return node;
   }
 
-  private static <T> T buildTree(Deque<Integer> array, Constructor<T> constructor,
-                                 Class<T> treeClass, Class<?> elementClass) throws Exception,
-      IllegalAccessException {
+  private static <T, E> T buildTree(Deque<E> array,
+                                    Class<T> treeClass, Class<E> elementClass) throws Exception {
     //check first element -> root
     if (array.isEmpty() || array.peek() == null) {
       return null;
@@ -78,9 +75,9 @@ public class TreeNodeUtils {
     left.setAccessible(true);
     right.setAccessible(true);
 
-    Integer rootVal = array.pop();
+    E rootVal = array.pop();
 
-    T root = generateSingleNode(rootVal, constructor, treeClass, elementClass);
+    T root = generateSingleNode(rootVal, treeClass, elementClass);
 
     //已经创建好node的集合 某一层的树的节点
     Stack<T> nodeStack = new Stack<>();
@@ -95,15 +92,15 @@ public class TreeNodeUtils {
       if (currentNode != null) {
         //构建左右节点
         if (!array.isEmpty()) {
-          Integer leftValue = array.pop();
-          T leftNode = generateSingleNode(leftValue, constructor, treeClass, elementClass);
+          E leftValue = array.pop();
+          T leftNode = generateSingleNode(leftValue, treeClass, elementClass);
           left.set(currentNode, leftNode);
           //左节点加入 nodeStack
           nodeStack.push(leftNode);
         }
         if (!array.isEmpty()) {
-          Integer rightValue = array.pop();
-          T rightNode = generateSingleNode(rightValue, constructor, treeClass, elementClass);
+          E rightValue = array.pop();
+          T rightNode = generateSingleNode(rightValue, treeClass, elementClass);
           right.set(currentNode, rightNode);
           //右节点加入 nodeStack
           nodeStack.push(rightNode);
@@ -115,18 +112,18 @@ public class TreeNodeUtils {
 }
 
 class TreeNode {
-  int val;
+  String val;
   TreeNode left;
   TreeNode right;
 
   TreeNode() {
   }
 
-  TreeNode(int val) {
+  TreeNode(String val) {
     this.val = val;
   }
 
-  TreeNode(int val, TreeNode left, TreeNode right) {
+  TreeNode(String val, TreeNode left, TreeNode right) {
     this.val = val;
     this.left = left;
     this.right = right;
