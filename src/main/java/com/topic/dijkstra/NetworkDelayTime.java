@@ -29,7 +29,9 @@ public class NetworkDelayTime {
   public int networkDelayTime(int[][] times, int n, int k) {
     //标记节点是否被访问
     distances = new int[n + 1];
+    //初始化到所有点的距离都为最大值
     Arrays.fill(distances, Integer.MAX_VALUE);
+    //起始点到自己的距离为0
     distances[k] = 0;
     //建图 lists[i]表示节点i的下一个节点 List<int[]> 0: 下一个节点， 1: 距离
     List<int[]>[] lists = new List[n + 1];
@@ -64,9 +66,11 @@ public class NetworkDelayTime {
       for (int[] next : nexts) {
         int nextNode = next[0];
         int nextDis = next[1];
+        //从当前路径到nextNode的距离 没有之前到nextNode的距离短，跳过更新
         if (nextDis + dis >= distances[nextNode]) {
           continue;
         }
+        //当前路线到nextNode的距离更近，更新此距离，并把nextNode放入优先队列
         distances[nextNode] = nextDis + dis;
         pq.offer(new int[]{nextNode, distances[nextNode]});
       }
