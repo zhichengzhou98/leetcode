@@ -1,4 +1,4 @@
-package com.topic;
+package com.competition;
 
 import com.zzc.utils.ArrayUtils;
 
