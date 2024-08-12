@@ -1,33 +1,29 @@
 package utils
 
-import "math"
-
-func Max(a, b int) int {
-	if a >= b {
-		return a
+func Max(nums ...int) int {
+	res := nums[0]
+	for _, val := range nums {
+		if val > res {
+			res = val
+		}
 	}
-	return b
+	return res
 }
 
-func Min(a, b int) int {
-	if a >= b {
-		return b
+func Min(nums ...int) int {
+	res := nums[0]
+	for _, val := range nums {
+		if val < res {
+			res = val
+		}
 	}
-	return a
+	return res
 }
 
 func ArrayMin(arr []int) int {
-	minVal := math.MaxInt64 // 初始化为最大整数
-	for _, num := range arr {
-		minVal = Min(minVal, num)
-	}
-	return minVal
+	return Min(arr...)
 }
 
 func ArrayMax(arr []int) int {
-	maxVal := math.MaxInt64
-	for _, num := range arr {
-		num = Max(maxVal, num)
-	}
-	return maxVal
+	return Max(arr...)
 }
