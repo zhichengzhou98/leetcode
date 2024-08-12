@@ -9,6 +9,12 @@ sum := make([]int64, size)
 
 #创建二维切片
 sum := make([][2]int64, size)
+
+#二维长度为变量时：
+dp := make([][]int, len(grid))
+for i := range dp {
+    dp[i] = make([]int, len(grid[0])) // 为每一行分配内存
+}
 ```
 
 2.Go不会自动进行类型转换。
