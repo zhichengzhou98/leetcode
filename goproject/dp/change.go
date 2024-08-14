@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	coins := []int{1, 2, 5}
-	fmt.Println(change(5, coins))
+	coins := []int{1, 2, 4}
+	fmt.Println(change(7, coins))
 }
 func change(amount int, coins []int) int {
 	dp := make([]int, amount+1)
