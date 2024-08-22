@@ -24,4 +24,14 @@ public class MathUtils {
     }
     return res;
   }
+  //进制转化
+  //10进制数 -> 二进制字符串
+  public static String parse10ToBinaryStr(long num) {
+    return Long.toBinaryString(num);
+  }
+
+  //二进制字符串 -> 10进制数
+  public static long parseBinaryStrTo10(String str) {
+    return Long.parseLong(str, 2);
+  }
 }
