@@ -10,6 +10,16 @@ func Max(nums ...int) int {
 	return res
 }
 
+func MaxInt64(nums ...int64) int64 {
+	res := nums[0]
+	for _, val := range nums {
+		if val > res {
+			res = val
+		}
+	}
+	return res
+}
+
 func Min(nums ...int) int {
 	res := nums[0]
 	for _, val := range nums {
@@ -21,9 +31,9 @@ func Min(nums ...int) int {
 }
 
 func ArrayMin(arr []int) int {
-	return Min(arr...)
+	return min(arr[0], arr...)
 }
 
 func ArrayMax(arr []int) int {
-	return Max(arr...)
+	return max(arr[0], arr...)
 }
