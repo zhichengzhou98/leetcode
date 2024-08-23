@@ -17,6 +17,14 @@ public class MathUtils {
     return res;
   }
 
+  public static long max(long... nums) {
+    long res = nums[0];
+    for (long num : nums) {
+      res = Math.max(res, num);
+    }
+    return res;
+  }
+
   public static int min(int... nums) {
     int res = nums[0];
     for (int num : nums) {
