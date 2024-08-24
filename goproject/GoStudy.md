@@ -40,3 +40,9 @@ s := "Hello, 世界"
 r := []rune(s) // 将字符串转换为 rune 切片
 fmt.Printf("字符: %c\n", r[7]) // 获取索引为7的字符，即'世'
 ```
+
+4.创建map
+```text
+// 创建map 键为string 值为int
+m := make(map[string]int)
+```
