@@ -67,11 +67,11 @@ public class TreeNodeUtils {
       return null;
     }
     // 获取名为 "val" 的字段
-    Field val = treeClass.getDeclaredField("val");
+    //Field val = treeClass.getDeclaredField("val");
     Field left = treeClass.getDeclaredField("left");
     Field right = treeClass.getDeclaredField("right");
     // 使字段可访问，即使它是私有的
-    val.setAccessible(true);
+    //val.setAccessible(true);
     left.setAccessible(true);
     right.setAccessible(true);
 

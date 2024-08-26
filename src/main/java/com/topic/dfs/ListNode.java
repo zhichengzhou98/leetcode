@@ -1,5 +1,7 @@
 package com.topic.dfs;
 
+import com.zzc.utils.ListNodeUtils;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -26,7 +28,7 @@ public class ListNode {
 
 class Solution {
   @Test
-  void testFnu() {
+  void testFnu() throws Exception {
     ListNode l1 = new ListNode(1);
     ListNode l2 = new ListNode(2);
     ListNode l3 = new ListNode(3);
@@ -35,7 +37,9 @@ class Solution {
     l2.next = l3;
     l3.next = l4;
     ListNode listNode = reverseKGroup(l1, 3);
-    System.out.println(listNode);
+    ListNode nodes2 = ListNodeUtils.generate(ListNode.class);
+    System.out.println(ListNodeUtils.printListNode(nodes2));
+    System.out.println(ListNodeUtils.printListNode(listNode));
   }
   public ListNode reverseKGroup(ListNode head, int k) {
     int len = 0;
