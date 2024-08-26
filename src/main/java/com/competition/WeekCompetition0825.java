@@ -2,7 +2,6 @@ package com.competition;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,58 +19,85 @@ import java.util.Set;
 public class WeekCompetition0825 {
   @Test
   void testFun() {
-    int[] arr = new int[]{3,12,30,17,21};
-    System.out.println(countPairs(arr));
+    int[] arr = new int[]{889458628,338743558,875422936,684907163,233489834};
+    System.out.println(Arrays.toString(getFinalState(arr, 246181588, 313380)));
+    //System.out.println(countPairs(arr));
   }
 
   private static final int MOD = (int) (Math.pow(10, 9) + 7);
 
   public int[] getFinalState(int[] nums, int k, int multiplier) {
     int len = nums.length;
-    int cnts = k / len;
-    //有cnts1个数需要多乘以一次multiplier
-    int cnts1 = k % len;
+
     //记录每个位置乘以multiplier的次数
     int[] cntArr = new int[len];
-    Arrays.fill(cntArr, cnts);
+
+    if (multiplier == 1) {
+      return nums;
+    }
     //优先队列
     //0：nums[i] i: 1
-    Queue<long[]> pq = new PriorityQueue<>((a,b) -> {
+    Queue<long[]> pq = new PriorityQueue<>((a, b) -> {
       if (a[0] == b[0]) {
-        return Math.toIntExact(a[1] - b[1]);
+        return Long.compare(a[1], b[1]);
       }
-      return Math.toIntExact(a[0] - b[0]);
+      return Long.compare(a[0], b[0]);
     });
+    long max = Long.MIN_VALUE;
     for (int i = 0; i < nums.length; i++) {
+      max = Math.max(max, nums[i]);
       pq.offer(new long[]{nums[i], i});
     }
-    //记录每个位置乘以multiplier的次数
-    while (cnts1 > 0) {
+    //当堆顶元素小于最大值时
+    while (pq.peek()[0] < max && k > 0) {
       long[] poll = pq.poll();
-      poll[0] = poll[0] * multiplier;
-      pq.offer(poll);
+      poll[0] *= multiplier;
       cntArr[(int) poll[1]]++;
-      cnts1--;
+      k--;
+      pq.offer(poll);
     }
+    //剩下的操作次数会依次作用给每个数
+    if (k > 0) {
+      int cnts = k / len;
+      //有cnts1个数需要多乘以一次multiplier
+      int cnts1 = k % len;
+      for (int i = 0; i < cntArr.length; i++) {
+        cntArr[i] += cnts;
+      }
+      //记录每个位置乘以multiplier的次数
+      //依次移除最小值
+      //不需要再放回队列
+      while (cnts1 > 0) {
+        long[] poll = pq.poll();
+        poll[0] = poll[0] * multiplier;
+        cntArr[(int) poll[1]]++;
+        cnts1--;
+      }
+    }
+    //记录每个位置乘以multiplier的次数
     for (int i = 0; i < len; i++) {
-      BigInteger tmp = exponentiationBySquaring(BigInteger.valueOf(multiplier), cntArr[i]);
-      tmp.multiply(BigInteger.valueOf(nums[i])).mod(BigInteger.valueOf(MOD));
-      nums[i] = tmp.multiply(BigInteger.valueOf(nums[i])).mod(BigInteger.valueOf(MOD)).intValue();
+      long tmp = exponentiationBySquaring(multiplier, cntArr[i]);
+      nums[i] = (int) (tmp * nums[i] % MOD);
     }
     return nums;
   }
-  private BigInteger exponentiationBySquaring(BigInteger a, int b) {
+
+  public long exponentiationBySquaring(int a, int b) {
     //求a的b次幂
     if (b == 1) {
-      return a;
+      return a % MOD;
+    }
+
+    if (b == 0) {
+      return 1;
     }
 
     if (b % 2 == 0) {
-      BigInteger x = exponentiationBySquaring(a, b / 2);
-      return x.multiply(x);
+      long x = exponentiationBySquaring(a, b / 2) % MOD;
+      return x * x % MOD;
     }
-    BigInteger y = exponentiationBySquaring(a, (b - 1) / 2);
-    return y.multiply(y).multiply(a);
+    long y = exponentiationBySquaring(a, (b - 1) / 2) % MOD;
+    return y * y % MOD * a % MOD;
   }
 
   public int countPairs(int[] nums) {
@@ -118,7 +144,7 @@ public class WeekCompetition0825 {
             temp.add(newInt);
             // 保存在哈希表中
             int cnts = map.getOrDefault(newInt, 0);
-            if (set.contains(newInt) && newInt!=key) {
+            if (set.contains(newInt) && newInt != key) {
               res = res + value * cnts;
             }
 
