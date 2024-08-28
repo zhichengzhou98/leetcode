@@ -9,7 +9,7 @@ import java.util.Set;
 
 /**
  * @author zc.zhou
- * @Description
+ * @Description 3144
  * @create 2024-08-28 9:19
  */
 public class MinimumSubstringsInPartition {
