@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * @author zc.zhou
- * @Description 76最小覆盖字串
+ * @Description 76最小覆盖字串 求最短
  * @create 2024-08-30 17:11
  */
 public class MinWindow {
@@ -42,7 +42,9 @@ public class MinWindow {
       }
 
       while (checkCnts(map) && left <= right) {
+        //满足条件时更新res
         if (right - left + 1 < len) {
+          //求最小值
           len = right - left + 1;
           res = s.substring(left, right + 1);
         }
