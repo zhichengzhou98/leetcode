@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * @author zc.zhou
- * @Description 状压DP
+ * @Description 3276状压DP 时间复杂度
  * @create 2024-09-01 11:27
  */
 public class MaxScore {
@@ -28,9 +28,41 @@ public class MaxScore {
   private int sum = 0;
   Map<String, Integer> map;
   public int maxScore(List<List<Integer>> grid) {
+    long start = System.currentTimeMillis();
     Set<Integer> set = new HashSet<>();
     map = new HashMap<>();
-    return dfsV2(grid, 0, set);
+    //sum = dfsV3(grid, 0, set, "");
+
+    //return dfsV2(grid, 0, set);
+    dfs(grid, 0, 0, set);
+    System.out.println(System.currentTimeMillis() - start);
+    return sum;
+  }
+
+  //str表示选中的数的位置
+  //选中第0行第0个 -> 1,
+  //同时选择第一行第1个 -> 2,1,
+  private int dfsV3(List<List<Integer>> grid, int row, Set<Integer> set, String str) {
+    String key = row + "," + str;
+    if (map.containsKey(key)) {
+      return map.get(key);
+    }
+    if (row >= grid.size()) {
+      return 0;
+    }
+    int res = 0;
+    for (int col = 0; col < grid.get(row).size(); col++) {
+      int value = grid.get(row).get(col);
+      if (!set.contains(value)) {
+        set.add(value);
+        //更新str
+        res = Math.max(res, value + dfsV3(grid, row + 1, set, (value + 1) + "," + str));
+        set.remove(value);
+      }
+    }
+    res = Math.max(res, dfsV3(grid, row + 1, set, 0 + "," + str));
+    map.put(key, res);
+    return res;
   }
 
   private int dfsV2(List<List<Integer>> grid, int row, Set<Integer> set) {
