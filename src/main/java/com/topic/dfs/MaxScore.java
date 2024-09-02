@@ -39,9 +39,20 @@ public class MaxScore {
     return sum;
   }
 
-  //str表示选中的数的位置
-  //选中第0行第0个 -> 1,
-  //同时选择第一行第1个 -> 2,1,
+  /**
+   * <p>100 99 98 97 96
+   * <p>90 89 88 87 86
+   * <p>80 79 78 77 76
+   * <p>70 69 68 67 66
+   * <p>60 59 58 57 56
+   * <p>回溯法：n^m
+   * <p>如果每个值都不一样 map并没有起到优化作用
+   * @param grid
+   * @param row
+   * @param set
+   * @param str 表示选中的数的位置 选中第0行第0个 -> 1, 同时选择第一行第1个 -> 2,1,
+   * @return
+   */
   private int dfsV3(List<List<Integer>> grid, int row, Set<Integer> set, String str) {
     String key = row + "," + str;
     if (map.containsKey(key)) {
