@@ -1,17 +1,14 @@
 package com.zzc.utils;
 
 
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * @author zc.zhou
@@ -19,45 +16,45 @@ import java.util.stream.Collectors;
  * @create 2023-09-27 17:58
  */
 public class ArrayUtils {
-  @Test
-  void testFun() throws IOException {
-    List<Integer> o = generate("array", List.class, Integer.class);
-    System.out.println(o);
-  }
-
+  private ArrayUtils() {}
   public static <T> T generate(String key, Class<?>... types) throws IOException {
     Properties properties = loadProperties();
     String arrayStr = properties.getProperty(key)
         .replace("\"", "")
         .replace(" ", "");
+    Object res = null;
     if (types.length == 1) {
       Class<?> type1 = types[0];
       if (type1 == int[][].class) {
-        return (T) parse2DIntArray(arrayStr);
+        res = parse2DIntArray(arrayStr);
       } else if (type1 == int[].class) {
-        return (T) parse1DIntArray(arrayStr);
+        res = parse1DIntArray(arrayStr);
       } else if (type1 == char[][].class) {
-        return (T) parse2DCharArray(arrayStr);
+        res = parse2DCharArray(arrayStr);
       }
     } else if (types.length == 2) {
       Class<?> type1 = types[0];
       Class<?> type2 = types[1];
       if (type1 == List.class) {
-        return (T) parseToList(arrayStr, type2);
+        res = parseToList(arrayStr, type2);
       } else if (type1 == Deque.class) {
         //倒序入栈
-        return (T) parseToDeque(arrayStr, type2);
+        res =  parseToDeque(arrayStr, type2);
       }
     } else if (types.length == 3) {
       Class<?> type1 = types[0];
       Class<?> type2 = types[1];
       Class<?> type3 = types[2];
       if (type1 == List.class && type2 == List.class) {
-        return (T) parse2DList(arrayStr, type3);
+        res = parse2DList(arrayStr, type3);
       }
     }
-
-    return null;
+    if (res != null) {
+      @SuppressWarnings("unchecked") T result = (T) res;
+      return result;
+    } else {
+      return null;
+    }
   }
 
   private static <E> Deque<E> parseToDeque(String arrayStr, Class<?> type2) {
@@ -118,34 +115,63 @@ public class ArrayUtils {
   }
 
   private static <E> List<E> parseToList(String arrayStr, Class<?> type) {
-    // 解析列表
-    //转链表
     String[] split = arrayStr.substring(1, arrayStr.length() - 1).split(",");
-    return (List<E>) Arrays.stream(split).map(e -> parseElement(e, type)).collect(Collectors.toList());
+    @SuppressWarnings("unchecked") List<E> res =
+        (List<E>) Arrays.stream(split).map(e -> parseElement(e, type)).toList();
+    return new ArrayList<>(res);
   }
 
   private static <E> List<List<E>> parse2DList(String arrayStr, Class<E> elementType) {
     String substring = arrayStr.substring(1, arrayStr.length() - 1);
     String[] arrays = substring.replace("],[", "];[").split(";");
-    return Arrays.stream(arrays)
+    List<List<E>> collect = Arrays.stream(arrays)
         .map(arr -> {
           String substring1 = arr.substring(1, arr.length() - 1);
           String[] split = substring1.split(",");
-          return Arrays.stream(split)
+          List<E> tmpList = Arrays.stream(split)
               .map(element -> parseElement(element, elementType))
-              .collect(Collectors.toList());
+              .toList();
+          return (List<E>) new ArrayList<>(tmpList);
         })
-        .collect(Collectors.toList());
+        .toList();
+    return new ArrayList<>(collect);
   }
 
+  /**
+   * <pre>
+   *   private static <E> E parseElement(String element, Class<E> elementType) {
+   *     if ("null".equals(element)) {
+   *       return null;
+   *     }
+   *
+   *     Object res;
+   *     if (elementType == Integer.class) {
+   *       res = Integer.valueOf(element);
+   *     } else if (elementType == String.class) {
+   *       res = element;
+   *     } else {
+   *       throw new IllegalArgumentException("Unsupported type for List.");
+   *     }
+   *
+   *     //@SuppressWarnings("unchecked")
+   *     E result = (E) res;
+   *     return result;
+   *   }
+   * </pre>
+   * @param element 元素值
+   * @param elementType 类型
+   * @return 返回对应类型的值
+   * @param <E> 泛型参数
+   */
   private static <E> E parseElement(String element, Class<E> elementType) {
     if ("null".equals(element)) {
       return null;
     }
+
     if (elementType == Integer.class) {
-      return (E) Integer.valueOf(element);
-    } else if (String.class == elementType) {
-      return (E) element;
+      return elementType.cast(Integer.valueOf(element));
+    } else if (elementType == String.class) {
+      return elementType.cast(element);
     } else {
       throw new IllegalArgumentException("Unsupported type for List.");
     }
