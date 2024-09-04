@@ -20,4 +20,11 @@ class MathUtilsTest {
   void parseBinaryStrTo10() {
     System.out.println(MathUtils.parseBinaryStrTo10("1000111100101001011001"));
   }
+
+  @Test
+  void getFactors() {
+    for (int i = 1; i < 50; i++) {
+      System.out.println(MathUtils.getFactors(i));
+    }
+  }
 }

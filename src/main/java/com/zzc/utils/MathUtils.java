@@ -1,5 +1,8 @@
 package com.zzc.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author zc.zhou
  * @Description
@@ -7,6 +10,24 @@ package com.zzc.utils;
  */
 public class MathUtils {
   private MathUtils(){}
+
+  /**
+   *
+   * @param n 求正整数所有的因子
+   * @return
+   */
+  public static List<Integer> getFactors(int n) {
+    List<Integer> res = new ArrayList<>();
+    for (int i = 1; i * i <= n ; i++) {
+      if (n % i == 0) {
+        res.add(i);
+        if (n != i * i) {
+          res.add(n / i);
+        }
+      }
+    }
+    return res;
+  }
 
   //多个int的最大/最小值
   public static int max(int... nums) {
