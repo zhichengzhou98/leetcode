@@ -29,6 +29,7 @@ public class CountArrangement {
 
 
   /**
+   * 复杂度：n * 2^n * n
    * @param n    还剩 1-n个数字没填
    * @param j    当前已经填过的位
    * @param memo 缓存
