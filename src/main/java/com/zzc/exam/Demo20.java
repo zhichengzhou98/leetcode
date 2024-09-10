@@ -6,19 +6,19 @@ package com.zzc.exam;
  * @create 2023-03-21 21:33
  */
 public class Demo20 {
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-    }
-    public int islandPerimeter(int[][] grid) {
-        //TODO
-        int area = 0;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == 1) {
-                    area++;
-                }
-            }
+  }
+
+  public int islandPerimeter(int[][] grid) {
+    int area = 0;
+    for (int i = 0; i < grid.length; i++) {
+      for (int j = 0; j < grid[i].length; j++) {
+        if (grid[i][j] == 1) {
+          area++;
         }
-        return area == 0 ? 0 : 2 * area + 2;
+      }
     }
+    return area == 0 ? 0 : 2 * area + 2;
+  }
 }
