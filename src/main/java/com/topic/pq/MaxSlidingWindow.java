@@ -12,7 +12,7 @@ public class MaxSlidingWindow {
   //优先队列 nlog(n)
   public int[] maxSlidingWindow(int[] nums, int k) {
     int[] res = new int[nums.length - k + 1];
-    //队列中的元素未nums索引
+    //队列中的元素为nums索引
     Queue<Integer> pq = new PriorityQueue<>((a,b) -> nums[b] - nums[a]);
     for (int i = 0; i < k; i++) {
       pq.offer(i);
