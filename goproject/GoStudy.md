@@ -15,6 +15,13 @@ dp := make([][]int, len(grid))
 for i := range dp {
     dp[i] = make([]int, len(grid[0])) // 为每一行分配内存
 }
+
+#创建切片不指定长度
+var list []int
+#添加元素
+list = append(list, num1)
+#删除元素(删除索引为2的元素)
+list = append(list[:2], list[3:]...)
 ```
 
 2.Go不会自动进行类型转换。
