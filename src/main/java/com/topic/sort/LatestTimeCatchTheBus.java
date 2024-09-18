@@ -3,6 +3,7 @@ package com.topic.sort;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,14 +15,59 @@ import java.util.stream.Collectors;
 public class LatestTimeCatchTheBus {
   @Test
   void testFun() {
-    /*int[] buses = {10,20};
-    int[] passengers = {2,17,18,19};*/
-    int[] buses = {3};
-    int[] passengers = {2, 4};
+    /*int[] buses = {5};
+    int[] passengers = {7,8};*/
+    /*int[] buses = {3};
+    int[] passengers = {2, 4};*/
+    /*int[] buses = {20, 30, 10};
+    int[] passengers = {19, 13, 26, 4, 25, 11, 21};*/
+    int[] buses = {10,20};
+    int[] passengers = {2,17,18,19};
+    /*int[] buses = {2};
+    int[] passengers = {2};*/
     System.out.println(latestTimeCatchTheBus(buses, passengers, 2));
   }
 
+
   public int latestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {
+    Arrays.sort(buses);
+    Arrays.sort(passengers);
+    Set<Integer> passengerSet = new HashSet<>();
+    for(int p : passengers) {
+      passengerSet.add(p);
+    }
+    int res = 0;
+    int left = 0;
+    for (int i = 0; i < buses.length; i++) {
+      int curBus = buses[i];
+      //统计能上当前车的乘客
+      int cnts = 0;
+      int right = left;
+      while (cnts < capacity && right < passengers.length && passengers[right] <= curBus) {
+        right++;
+        cnts++;
+      }
+      int current;
+      if (cnts >= capacity) {
+        //当前车满员 乘客为[left, right - 1]
+        //插队到right - 1之前
+        current = passengers[right - 1] - 1;
+      } else {
+        //当前车没有满员
+        current = curBus;
+      }
+      left = right;
+      for (int j = current; j > res; j--) {
+        if (!passengerSet.contains(j)) {
+          res = j;
+          break;
+        }
+      }
+    }
+    return res;
+  }
+
+  public int latestTimeCatchTheBusV1(int[] buses, int[] passengers, int capacity) {
     Arrays.sort(buses);
     Arrays.sort(passengers);
     Set<Integer> passengerSet = Arrays.stream(passengers).boxed().collect(Collectors.toSet());
