@@ -38,7 +38,49 @@ public class KIncreasing {
     return res;
   }
 
+  /**
+   * 获取最长非递减子序列 => 300 最长递增子序列
+   * @param nums
+   * @return
+   */
+  public int getMaxLenNonDesc(List<Integer> nums) {
+    List<Integer> dp = new ArrayList<>();
+    //dp[i] -> i 表示以dp[i]为结尾的最长非递减子序列的长度
+    dp.add(nums.get(0));
+    for (int i = 1; i < nums.size(); i++) {
+      //查找左边界 找到第一个比num[i]大的索引  不需要取等
+      //非递减子序列 => 相同的数字可以出现多次 => 二分法中check函数不能取等号（找严格大于等于target的index） => 判断边界时就不需要等号
+      int current = nums.get(i);
+      if (current >= dp.get(dp.size() - 1)) {
+        //大于等于最大值 直接放到右边
+        dp.add(current);
+      } else {
+        int index = leftBoundary(dp, current);
+        //更新当前index的值为current
+        dp.set(index, current);
+      }
+    }
+    return dp.size();
+  }
 
+  private int leftBoundary(List<Integer> nums, int target) {
+    int l = 0;
+    int r = nums.size() - 1;
+    int med = (r - l) / 2 + l;
+    while (l < r) {
+      if (checkMed(nums.get(med), target)) {
+        r = med;
+      } else {
+        l = med + 1;
+      }
+      med = (r - l) / 2 + l;
+    }
+    return med;
+  }
+
+  private boolean checkMed(int current, int tar) {
+    return current > tar;
+  }
 
   /**
    * 第300题 o(nlogn)
@@ -46,7 +88,7 @@ public class KIncreasing {
    * @param list 获取list的最长非递减序列的长度
    * @return 最长非递减序列的长度
    */
-  private int getMaxLenNonDesc(List<Integer> list) {
+  private int getMaxLenNonDescV1(List<Integer> list) {
     //dp[i]表示以i结尾最长的非递减子序列
     int[] dp = new int[list.size()];
     Arrays.fill(dp, 1);
