@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 /**
  * @author zc.zhou
- * @Description 2719 统计整数数目 TODO
+ * @Description 2719 统计整数数目
  * @create 2024-09-20 13:15
  */
 public class Count {
@@ -22,7 +22,7 @@ public class Count {
   public int count(String num1, String num2, int min_sum, int max_sum) {
     this.maxSum = max_sum;
     this.minSum = min_sum;
-    return (int) ((countSpecialNumbers(num2) - countSpecialNumbers(sub(num1))) % MOD);
+    return ((countSpecialNumbers(num2) - countSpecialNumbers(sub(num1)) + MOD) % MOD);
   }
 
   public String sub(String num) {
@@ -45,7 +45,7 @@ public class Count {
   int maxSum;
   int minSum;
 
-  public double countSpecialNumbers(String n) {
+  public int countSpecialNumbers(String n) {
     if ("0".equals(n)) {
       return 0;
     }
@@ -53,10 +53,10 @@ public class Count {
     //数值n的长度
     this.len = this.strN.length();
     int curDigital = 0;
-    double[][][][] memo = new double[len][400][2][2];
-    for (double[][][] arr1 : memo) {
-      for (double[][] arr2 : arr1) {
-        for (double[] arr3 : arr2) {
+    int[][][][] memo = new int[len][400][2][2];
+    for (int[][][] arr1 : memo) {
+      for (int[][] arr2 : arr1) {
+        for (int[] arr3 : arr2) {
           Arrays.fill(arr3, -1);
         }
       }
@@ -75,8 +75,8 @@ public class Count {
    *                   第二位不能超过3
    * @return 满足添加的数的个数
    */
-  private double dfs(int curDigital, int currentSum, boolean skipped, boolean isLimited,
-                   double[][][][] memo) {
+  private int dfs(int curDigital, int currentSum, boolean skipped, boolean isLimited,
+                  int[][][][] memo) {
     if (curDigital == len) {
       //从 0 到 len - 1 都已经选完, 如果一直都是跳过，则这次不是一次有效的值
       if (skipped) {
@@ -91,7 +91,7 @@ public class Count {
     if (memo[curDigital][currentSum][skipped ? 1 : 0][isLimited ? 1 : 0] != -1) {
       return memo[curDigital][currentSum][skipped ? 1 : 0][isLimited ? 1 : 0];
     }
-    double res = 0D;
+    long res = 0;
     //需要判断最后一位能否填0，如果前面全都跳过，如果继续跳过直接dfs到下一位
     //如果不跳过，则最小值从1开始
     //如果前面有没有跳过的，则最小值从0开始
@@ -101,17 +101,17 @@ public class Count {
     //可以选择跳过
     if (skipped) {
       //跳过
-      res = res + dfs(curDigital + 1, currentSum, true, false, memo);
+      res = (res + dfs(curDigital + 1, currentSum, true, false, memo)) % MOD;
     }
     //skipped：true, 且当前不跳过, 之前都跳过了, 既然当前不能跳过, 那么最小值应该从1开始
     //skipped：false, 当前不能选择跳过 之前填过数字, 当前可以填0
     for (int i = minDigital; i <= maxDigital; i++) {
-      res = res + dfs(curDigital + 1,
+      res = (res + dfs(curDigital + 1,
           currentSum + i,
           false,
-          isLimited && i == maxDigital, memo);
+          isLimited && i == maxDigital, memo)) % MOD;
     }
-    memo[curDigital][currentSum][skipped ? 1 : 0][isLimited ? 1 : 0] = res;
-    return res;
+    memo[curDigital][currentSum][skipped ? 1 : 0][isLimited ? 1 : 0] = (int) res;
+    return (int) res;
   }
 }
