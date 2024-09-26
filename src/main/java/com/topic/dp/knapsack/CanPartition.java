@@ -35,10 +35,13 @@ public class CanPartition {
       for (int j = 0; j < dp[0].length; j++) {
         if (j == 0) {
           dp[i][j] = true;
-        } else if (j <= m && j - nums[i] >= 0) {
-          dp[i][j] = dp[i - 1][j - nums[i]] || dp[i - 1][j];
         } else if (j <= m) {
+          //不选第i个物品
           dp[i][j] = dp[i - 1][j];
+          //选第i个物品 => 前 i-1 个物品要实现j - nums[i]
+          if (j - nums[i] >= 0) {
+            dp[i][j] |= dp[i - 1][j - nums[i]];
+          }
         }
       }
     }
