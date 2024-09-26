@@ -5,14 +5,14 @@ import java.util.List;
 
 /**
  * @author zc.zhou
- * @Description 295. 数据流的中位数 二分法 TODO list.add(index, num) 并非o(1)时间复杂度
+ * @Description 295. 数据流的中位数 二分法 list.add(index, num) 并非o(1)时间复杂度
  * @create 2024-09-24 19:30
  */
-public class MedianFinder {
+public class MedianFinderV1 {
   List<Integer> list;
   int n;
 
-  public MedianFinder() {
+  public MedianFinderV1() {
     list = new ArrayList<>();
     n = 0;
   }
