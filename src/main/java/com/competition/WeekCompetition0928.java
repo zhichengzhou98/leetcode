@@ -2,7 +2,9 @@ package com.competition;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TreeSet;
 
 /**
@@ -13,134 +15,102 @@ import java.util.TreeSet;
 public class WeekCompetition0928 {
   @Test
   void testFun() {
-    String s1 = "cedccdccccce";
-    String s2 = "dfk";
+    String s1 = "accbbaeddkddddeeed";
+    String s2 = "eddedd";
     System.out.println(Arrays.toString(validSequence(s1, s2)));
   }
 
   public int[] validSequence(String word1, String word2) {
     arr1 = word1.toCharArray();
     arr2 = word2.toCharArray();
-    this.word1 = word1;
-    this.word2 = word2;
-    return dfs(0, 0, true);
+    res = new ArrayList<>();
+    boolean flag = dfsV1(0, 0, true);
+    if (flag) {
+      return res.stream().mapToInt(Integer::intValue).toArray();
+    }
+    return new int[0];
   }
 
-  String word1;
-  String word2;
   char[] arr1;
   char[] arr2;
-
-  private int[] dfs(int l1, int l2, boolean flag) {
-    char c2 = arr2[l2];
-    char c1 = arr1[l1];
-    if (arr2.length - l2 > arr1.length - l1) {
-      return new int[0];
-    }
-    int[] res = new int[arr2.length - l2];
-    //int leftWord2 =
-    //贪心
-    if (c1 == c2) {
-      if (l2 == arr2.length - 1) {
-        return new int[]{0};
-      }
-      int[] tmp = dfs(l1 + 1, l2 + 1, flag);
-      if (tmp.length == 0) {
-        return tmp;
-      }
-      res[0] = 0;
-      for (int i = 0; i < tmp.length; i++) {
-        res[1 + i] = tmp[i] + 1;
-      }
-      return res;
-    } else {
-      //假设替换第一个字母
-      if (flag) {
-        res[0] = 0;
-        if (l2 == arr2.length - 1) {
-          return new int[]{0};
-        }
-        int[] tmp = isSubSeq(this.word1.substring(l1 + 1), this.word2.substring(l2 +1));
-        if (tmp.length == 0) {
-          //不能替换
-          //找到word1中第一个word2[0]
-          int index = l1;
-          while (index < arr1.length && arr1[index] != c2) {
-            index++;
-          }
-          if (index >= arr1.length) {
-            return new int[0];
-          }
-          res[0] = index;
-          tmp = dfs(index +1, l2 + 1, true);
-          if (tmp.length == 0) {
-            return tmp;
-          }
-          for (int i = 0; i < tmp.length; i++) {
-            res[1 + i] = tmp[i] + index + 1;
-          }
-          return res;
-        } else {
-          for (int i = 0; i < tmp.length; i++) {
-            res[1 + i] = tmp[i] + 1;
-          }
-          return res;
-        }
-      }else {
-        int index = l1;
-        while (index < arr1.length && arr1[index] != c2) {
-          index++;
-        }
-        if (index >= arr1.length) {
-          return new int[0];
-        }
-        res[0] = index;
-        int[] tmp = dfs(l1+ 1, l2 +1, false);
-        for (int i = 0; i < tmp.length; i++) {
-          res[1 + i] = tmp[i] + index + 1;
-        }
-        return res;
-      }
-    }
-  }
-
+  List<Integer> res;
 
   /**
-   * 判断seq是不是s的子序列
+   * 能否找到符合条件的index序列
    *
-   * @param s
-   * @param seq
+   * @param l1        word1中的位置
+   * @param l2        word2中的位置
+   * @param canChange 是否能替换
    * @return
    */
-  public int[] isSubSeq(String s, String seq) {
-    if (seq.length() > s.length()) {
-      return new int[0];
+  private boolean dfsV1(int l1, int l2, boolean canChange) {
+    if (l2 == arr2.length) {
+      //已经遍历完
+      return true;
     }
-    int[] res = new int[seq.length()];
-    int i = 0;
-    int p1 = 0;
-    int p2 = 0;
-    while (p1 < seq.length()) {
-      char c = seq.charAt(p1);
-      while (p2 < s.length() && s.charAt(p2) != c) {
-        p2++;
-      }
-      if (p2 == s.length()) {
-        return new int[0];
-      } else {
-        res[i] = p2;
-        i++;
-        p1++;
-        p2++;
-      }
+    if (arr2.length - l2 > arr1.length - l1) {
+      //word2剩下的字符比word1剩下的字符多 不能满足
+      return false;
     }
-    return res;
+    char c2 = arr2[l2];
+    char c1 = arr1[l1];
+    //贪心
+    if (c1 == c2) {
+      res.add(l1);
+      boolean tmp = dfsV1(l1 + 1, l2 + 1, canChange);
+      return handleResult(tmp);
+    } else {
+      //首字母不相等
+      if (canChange) {
+        //能替换
+        //假设替换第一个字母
+        res.add(l1);
+        boolean tmp = dfsV1(l1 + 1, l2 + 1, false);
+        if (tmp) {
+          return tmp;
+        }
+        //不能替换 回溯
+        res.remove(res.size() - 1);
+      }
+      int index = findFirst(l1, c2);
+      if (index == -1) {
+        return false;
+      }
+      res.add(index);
+      boolean tmp = dfsV1(index + 1, l2 + 1, canChange);
+      return handleResult(tmp);
+    }
   }
+
+  private boolean handleResult(boolean flag) {
+    if (flag) {
+      return flag;
+    }
+    res.remove(res.size() - 1);
+    return flag;
+  }
+
+  /**
+   * 找到word1中从begin开始第一个等于target的字符
+   *
+   * @param begin  从begin开始找
+   * @param target 目标字符
+   * @return -1 没找到
+   */
+  private int findFirst(int begin, char target) {
+    while (begin < arr1.length && arr1[begin] != target) {
+      begin++;
+    }
+    if (begin < arr1.length) {
+      return begin;
+    }
+    return -1;
+  }
+
 
   public long maximumTotalSum(int[] maximumHeight) {
     Arrays.sort(maximumHeight);
     int size = maximumHeight.length;
-    TreeSet<Integer> treeSet = new TreeSet<>();
     long totalSum = 0;
     int max = Integer.MAX_VALUE;
     for (int i = size - 1; i >= 0; i--) {
