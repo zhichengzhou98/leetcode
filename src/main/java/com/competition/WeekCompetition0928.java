@@ -5,11 +5,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeSet;
 
 /**
  * @author zc.zhou
- * @Description
+ * @Description 3302. 字典序最小的合法序列
  * @create 2024-09-28 22:23
  */
 public class WeekCompetition0928 {
