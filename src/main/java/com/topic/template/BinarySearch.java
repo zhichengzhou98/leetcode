@@ -32,6 +32,8 @@ public class BinarySearch {
   }
 
   //查找左边界: 满足checkMed的最小值  大于（等于）target的最小值（取等于时， checkMed判断条件也需要取等于）
+  //使用之前需要检查右边界是否满足 => 右边界都不满足（右边界小于（等于） target），区间所有值都不满足
+  //如果checkMed返回true时 取到等号， 检查边界时就不需要取到等号
   public int leftBoundary(int[] nums, int target) {
     int l = 0;
     int r = nums.length - 1;
@@ -48,6 +50,7 @@ public class BinarySearch {
   }
 
   //查找右边界 小于等于 target的最大值  checkMedRight 小于等于时为true！！！
+  //使用之前需要检查左边界 => 左边界不满足(大于 target), 则区间所有的值都大于target
   public int rightBoundary(int[] nums, int target) {
     int l = 0;
     int r = nums.length - 1;
