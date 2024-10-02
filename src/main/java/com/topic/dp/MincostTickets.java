@@ -4,6 +4,10 @@ import com.zzc.utils.MathUtils;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * @author zc.zhou
  * @Description 983. 最低票价
@@ -12,8 +16,8 @@ import org.junit.jupiter.api.Test;
 public class MincostTickets {
   @Test
   void testFun() {
-    int[] d = {1, 4, 6, 7, 8, 20};
-    int[] c = {2, 7, 15};
+    int[] d = {1, 4, 6, 7, 8};
+    int[] c = {7, 2, 15};
     System.out.println(mincostTickets(d, c));
   }
 
@@ -54,7 +58,7 @@ public class MincostTickets {
     return dp[size - 1][4];
   }
 
-  public int mincostTickets(int[] days, int[] costs) {
+  public int mincostTicketsV2(int[] days, int[] costs) {
     int size = days.length;
     //dp[i][j] 表示0-i 天最小的花费， 且第i天买的票为costs[j] j==3表示第i天不买票
     //j == 4表示 j为[0,3]的最小值
@@ -86,6 +90,43 @@ public class MincostTickets {
       dp[i][4] = min(dp[i][0], dp[i][1], dp[i][2], dp[i][3]);
     }
     return dp[size - 1][4];
+  }
+
+  int[] costs;
+  int[] memo;
+  Set<Integer> daySet;
+
+  public int mincostTickets(int[] days, int[] costs) {
+    int size = days.length;
+    memo = new int[366];
+    Arrays.fill(memo, -1);
+    this.costs = costs;
+    daySet = Arrays.stream(days).boxed().collect(Collectors.toSet());
+    return dfs(days[size - 1]);
+  }
+
+  private int dfs(int i) {
+    if (i <= 0) {
+      return 0;
+    }
+    int res = 0;
+    if (memo[i] != -1) {
+      return memo[i];
+    }
+    if (!daySet.contains(i)) {
+      return dfs(i - 1);
+    }
+    if (i <= 1) {
+      res = min(costs[0], costs[1], costs[2]);
+    } else if (i <= 6) {
+      res = min(dfs(i - 1) + costs[0], costs[1]);
+    } else if (i <= 29) {
+      res = min(dfs(i - 1) + costs[0], dfs(i - 7) + costs[1], costs[2]);
+    } else {
+      res = min(dfs(i - 1) + costs[0], dfs(i - 7) + costs[1], dfs(i - 30) + costs[2]);
+    }
+    memo[i] = res;
+    return res;
   }
 
   public static int min(int... nums) {
