@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 /**
  * @author zc.zhou
- * @Description 1227. 飞机座位分配概率 TODO: dp + 前缀和优化
+ * @Description 1227. 飞机座位分配概率
  * @create 2024-10-04 17:45
  */
 public class NthPersonGetsNthSeat {
