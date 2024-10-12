@@ -51,7 +51,7 @@ public class IsPrime {
 
 
   //埃氏筛，求小于等于n的所有质数
-  public List<Integer> sieveOfEratosthenes(int n) {
+  public static List<Integer> sieveOfEratosthenes(int n) {
     assert n >= 1;
     //质数数组，false: 是质数
     boolean[] primeFlag = new boolean[n];
