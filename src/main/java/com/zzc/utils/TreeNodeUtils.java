@@ -6,7 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Stack;
+import java.util.LinkedList;
 
 /**
  * @author zc.zhou
@@ -80,7 +80,7 @@ public class TreeNodeUtils {
     T root = generateSingleNode(rootVal, treeClass, elementClass);
 
     //已经创建好node的集合 某一层的树的节点
-    Stack<T> nodeStack = new Stack<>();
+    Deque<T> nodeStack = new LinkedList<>();
     nodeStack.push(root);
 
     while (!array.isEmpty()) {
@@ -88,7 +88,7 @@ public class TreeNodeUtils {
       if (nodeStack.isEmpty()) {
         break;
       }
-      T currentNode = nodeStack.pop();
+      T currentNode = nodeStack.pollFirst();
       if (currentNode != null) {
         //构建左右节点
         if (!array.isEmpty()) {
@@ -96,14 +96,14 @@ public class TreeNodeUtils {
           T leftNode = generateSingleNode(leftValue, treeClass, elementClass);
           left.set(currentNode, leftNode);
           //左节点加入 nodeStack
-          nodeStack.push(leftNode);
+          nodeStack.offerLast(leftNode);
         }
         if (!array.isEmpty()) {
           E rightValue = array.pop();
           T rightNode = generateSingleNode(rightValue, treeClass, elementClass);
           right.set(currentNode, rightNode);
           //右节点加入 nodeStack
-          nodeStack.push(rightNode);
+          nodeStack.offerLast(rightNode);
         }
       }
     }
