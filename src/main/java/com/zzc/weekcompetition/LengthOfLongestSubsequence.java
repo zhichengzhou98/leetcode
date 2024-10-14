@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author zc.zhou
- * @Description TODO: 01 背包 100042. 和为目标值的最长子序列的长度
+ * @Description
  * @create 2023-10-28 22:48
  */
 public class LengthOfLongestSubsequence {
