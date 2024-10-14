@@ -18,3 +18,7 @@ set = map.keys()
 
 
 # and or not
+
+# 创建二维数组
+rows, cols = 2, 3
+dp = [[0] * cols for _ in range(rows)]
