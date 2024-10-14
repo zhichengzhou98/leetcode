@@ -1,16 +1,19 @@
 package com.topic.dp;
 
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 
 /**
  * @author zc.zhou
  * @Description 1884. 鸡蛋掉落-两枚鸡蛋
+ * 887鸡蛋掉落
  * @create 2024-10-13 16:43
  */
 public class TwoEggDrop {
   @Test
   void testFun() {
-    System.out.println(twoEggDrop(2));
+    System.out.println(twoEggDrop(10000));
+    System.out.println(superEggDrop(2,1000));
   }
   //o(n²)
   public int twoEggDrop(int n) {
@@ -34,5 +37,33 @@ public class TwoEggDrop {
       }
     }
     return dp[n][1];
+  }
+
+  //o(k*n²)
+  public int superEggDrop(int k, int n) {
+    //dp[i][j]: 表示楼层0-i 需要判断的次数
+    //j: 表示使用第j + 1个鸡蛋
+    //使用一个鸡蛋时，只能从低楼层依次往高楼层尝试 故dp[i][1] = i
+    int[][] dp = new int[n + 1][k];
+    Arrays.fill(dp[1], 1);
+    for (int i = 1; i < n + 1; i++) {
+      dp[i][0] = i;
+      for (int j = 1; j < k; j++) {
+        dp[i][j] = Integer.MAX_VALUE;
+        //考虑第(j)个鸡蛋(索引j-1)选择从哪一个楼层开始
+        //从m楼扔下
+        //如果鸡蛋未碎， 需要检查[m + 1, i]楼层，还剩j个鸡蛋
+        //鸡蛋碎了，需要检查[0, m-1]楼层，还剩j-1个鸡蛋
+        for (int m = 1; m <= i; m++) {
+          dp[i][j] = Math.min(dp[i][j],Math.max(
+              //TODO: dp[m-1][j-1]随m增大而增大 dp[i-m][j]随m增大而减小
+              //求V字形数据的最小值
+              //162 寻找峰值
+              1 + dp[m-1][j-1], 1 + dp[i-m][j]
+          ));
+        }
+      }
+    }
+    return dp[n][k-1];
   }
 }
