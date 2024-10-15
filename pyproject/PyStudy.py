@@ -25,3 +25,8 @@ for i in range(10, 5, -1):
 print("============")
 arr = [0, 1, 2]
 print(arr[-1])
+
+
+# 创建二维数组
+rows, cols = 2, 3
+dp = [[0] * cols for _ in range(rows)]
