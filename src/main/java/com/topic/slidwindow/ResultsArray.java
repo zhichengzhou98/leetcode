@@ -12,9 +12,10 @@ import java.util.Arrays;
 public class ResultsArray {
   @Test
   void testFun() {
-    System.out.println(Arrays.toString(resultsArray(new int[]{3,2,3,2,3,2}, 2)));
+    System.out.println(Arrays.toString(resultsArray(new int[]{1,7,8}, 2)));
   }
-  public int[] resultsArray(int[] nums, int k) {
+
+  public int[] resultsArrayV1(int[] nums, int k) {
     if (k == 1) {
       return nums;
     }
@@ -24,7 +25,7 @@ public class ResultsArray {
     while (right < k - 1) {
       if (nums[right + 1] - nums[right] == 1) {
         cnt++;
-      }else {
+      } else {
         cnt = 1;
       }
       right++;
@@ -38,7 +39,7 @@ public class ResultsArray {
     for (int i = 1; i < res.length; i++) {
       if (nums[right + 1] - nums[right] == 1) {
         cnt++;
-      }else {
+      } else {
         cnt = 1;
       }
       if (cnt >= k) {
@@ -47,6 +48,42 @@ public class ResultsArray {
         res[i] = -1;
       }
       right++;
+    }
+    return res;
+  }
+
+
+  public int[] resultsArray(int[] nums, int k) {
+    if (k == 1) {
+      return nums;
+    }
+    int size = nums.length;
+    int[] res = new int[size - k + 1];
+    int cnt = 1;
+    //计算首个元素
+    for (int i = 1; i < k; i++) {
+      if (nums[i] - nums[i - 1] == 1) {
+        cnt++;
+      } else {
+        cnt = 1;
+      }
+    }
+    if (cnt == k) {
+      res[0] = nums[k - 1];
+    } else {
+      res[0] = -1;
+    }
+    for (int i = k; i < nums.length; i++) {
+      if (nums[i] - nums[i - 1] == 1) {
+        cnt++;
+      } else {
+        cnt = 1;
+      }
+      if (cnt >= k) {
+        res[i -k + 1] = nums[i];
+      } else {
+        res[i -k + 1] = -1;
+      }
     }
     return res;
   }
