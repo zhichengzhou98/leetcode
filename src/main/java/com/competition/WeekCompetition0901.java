@@ -104,7 +104,15 @@ public class WeekCompetition0901 {
     return results;
   }
 
+  // 3274 检查棋盘方格颜色是否相同
   public boolean checkTwoChessboards(String coordinate1, String coordinate2) {
+
+    int delt1 = Math.abs(coordinate1.charAt(0) - coordinate2.charAt(0));
+    int delt2 = Math.abs(coordinate1.charAt(1) - coordinate2.charAt(1));
+    return (delt2 + delt1) % 2 == 0;
+  }
+
+  public boolean checkTwoChessboardsV1(String coordinate1, String coordinate2) {
 
     boolean color1 = getColor(coordinate1);
     boolean color2 = getColor(coordinate2);
