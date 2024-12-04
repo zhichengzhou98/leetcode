@@ -18,20 +18,23 @@ public class Demo24 {
 
   private int count() {
     int res = 0;
+    int total = 0;
     List<int[]> list = generate();
-    System.out.println(list.size());
+    //list.forEach(a -> System.out.println(Arrays.toString(a)));
     for (int i = 0; i < list.size(); i++) {
       int[] pA = list.get(i);
       for (int j = i + 1; j < list.size(); j++) {
         int[] pB = list.get(j);
         for (int k = j + 1; k < list.size(); k++) {
           int[] pC = list.get(k);
+          total++;
           if (square(pA, pB, pC) == 4.0) {
             res++;
           }
         }
       }
     }
+    System.out.println(total);
     return res;
   }
 
@@ -42,7 +45,7 @@ public class Demo24 {
     int y2 = b[1];
     int x3 = c[0];
     int y3 = c[1];
-    return 0.5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+    return Math.abs(0.5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)));
   }
 
   private List<int[]> generate() {
