@@ -14,6 +14,67 @@ public class KnightDialerV1 {
 
   public int knightDialer(int n) {
     // 每个点的下一个节点
+    int[][] matrix = new int[][]{
+        {0,0,0,0,1,0,1,0,0,0},
+        {0,0,0,0,0,0,1,0,1,0},
+        {0,0,0,0,0,0,0,1,0,1},
+        {0,0,0,0,1,0,0,0,1,0},
+        {1,0,0,1,0,0,0,0,0,1},
+        {0,0,0,0,0,0,0,0,0,0},
+        {1,1,0,0,0,0,0,1,0,0},
+        {0,0,1,0,0,0,1,0,0,0},
+        {0,1,0,1,0,0,0,0,0,0},
+        {0,0,1,0,1,0,0,0,0,0}
+    };
+    if (n == 1) {
+      return 10;
+    }
+
+    int[][] res = matrixExponentiationBySquaring(matrix, n-1, MOD);
+
+    long res1 = 0L;
+    for (int i = 0; i < 10; i++) {
+      for (int j = 0; j < 10; j++) {
+        res1 = (res1 + res[i][j]) % MOD;
+      }
+    }
+    return (int) res1;
+  }
+
+  public int[][] matrixExponentiationBySquaring(int[][] matrix, int n, int MOD) {
+    if (n == 1) {
+      return matrix;
+    }
+    if (n % 2 == 0) {
+      int[][] tempMatrix = matrixExponentiationBySquaring(matrix, n / 2, MOD);
+      return matrixMultiplication(tempMatrix, tempMatrix, MOD);
+    }
+    int[][] tempMatrix = matrixExponentiationBySquaring(matrix, (n - 1) / 2, MOD);
+    tempMatrix = matrixMultiplication(tempMatrix, tempMatrix, MOD);
+    return matrixMultiplication(tempMatrix, matrix, MOD);
+  }
+
+  private int[][] matrixMultiplication(int[][] matrixA, int[][] matrixB, int MOD) {
+    int[][] res = new int[matrixA.length][matrixA[0].length];
+    for (int i = 0; i < res.length; i++) {
+      for (int j = 0; j < res[i].length; j++) {
+        //tempMatrix 第i行 * 第j列
+        int[] lineI = matrixA[i];
+        int[] columJ = new int[res[i].length];
+        for (int k = 0; k < columJ.length; k++) {
+          columJ[k] = matrixB[k][j];
+        }
+        res[i][j] = 0;
+        for (int k = 0; k < lineI.length; k++) {
+          res[i][j] = (int) ((res[i][j] + ((long) lineI[k] * columJ[k]) % MOD) % MOD);
+        }
+      }
+    }
+    return res;
+  }
+
+  public int knightDialerV2(int n) {
+    // 每个点的下一个节点
     map = new int[][]{{4, 6}, {8, 6}, {7, 9}, {4, 8}, {9, 3, 0}, {}, {1, 7, 0}, {2, 6}, {1, 3},
         {2, 4}};
     long[][] dp = new long[10][n + 1];
