@@ -1,18 +1,29 @@
 package com.topic.baoli;
 
+import com.zzc.utils.ArrayUtils;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author zc.zhou
- * @Description
+ * @Description 3242. 设计相邻元素求和服务
  * @create 2024-08-04 10:31
  */
-public class neighborSum {
+public class NeighborSum {
+  public static void main(String[] args) throws IOException {
+    int[][] grid = ArrayUtils.generate("array", int[][].class);
+    NeighborSum sum = new NeighborSum(grid);
+    System.out.println(sum.adjacentSum(1));
+    System.out.println(sum.adjacentSum(4));
+    System.out.println(sum.diagonalSum(4));
+    System.out.println(sum.diagonalSum(8));
+  }
   int[][] grid;
   //记录每个值的坐标
   Map<Integer, int[]> map;
-  public neighborSum(int[][] grid) {
+  public NeighborSum(int[][] grid) {
     this.grid = grid;
     map = new HashMap<>();
     for (int i = 0; i < grid.length; i++) {

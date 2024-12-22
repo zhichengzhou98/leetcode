@@ -1,7 +1,10 @@
 package com.competition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zc.zhou
@@ -81,6 +84,19 @@ public class WeekCompetition0811 {
         j--;
       }
     }
+    return (i * n) + j;
+  }
+
+  public int finalPositionOfSnakeV1(int n, List<String> commands) {
+    Map<String, Integer> map = commands.stream().collect(Collectors.toMap(
+        v -> v,
+        v -> 1,
+        Integer::sum
+    ));
+    int i = map.getOrDefault("DOWN", 0) -
+        map.getOrDefault("UP", 0);
+    int j = map.getOrDefault("RIGHT", 0) -
+        map.getOrDefault("LEFT", 0);
     return (i * n) + j;
   }
 }

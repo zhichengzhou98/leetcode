@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 /**
  * @author zc.zhou
- * @Description 3244
+ * @Description 3244. 新增道路查询后的最短距离 II 并查集
  * @create 2024-08-09 13:57
  */
 public class ShortestDistanceAfterQueries {
@@ -18,9 +18,38 @@ public class ShortestDistanceAfterQueries {
     int[][] queries = ArrayUtils.generate("array", int[][].class);
     System.out.println(Arrays.toString(shortestDistanceAfterQueries(5, queries)));
   }
-
-  //超时
   public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+    // 0 -> 1 -> 2  0 ~ n - 1 一个n个节点， n-1个区间
+    int[] res = new int[queries.length];
+    //记录每个节点联通的下一个最远的节点
+    //最后一个节点不需要记录
+    int[] nexts = new int[n-1];
+    for (int i = 0; i < nexts.length; i++) {
+      nexts[i] = i + 1;
+    }
+    UnionFindV5 uf = new UnionFindV5(n - 1);
+    for (int i = 0; i < queries.length; i++) {
+      int begin = queries[i][0];
+      int end = queries[i][1];//end表示点的位置
+      int nextNode = nexts[begin];
+      int current = begin;
+      while (nextNode < end) {
+        uf.union(nextNode - 1, nextNode);
+        nextNode = nexts[nextNode];
+        nexts[current] = nextNode;
+        if (current < n-1) {
+          nexts[current] = end;
+        }
+        current = nextNode;
+      }
+      res[i] = uf.size;
+      // 更新当前起点的下一个节点
+      nexts[begin] = end;
+    }
+    return res;
+  }
+
+  public int[] shortestDistanceAfterQueriesV1(int n, int[][] queries) {
     // 0 -> 1 -> 2  0 ~ n - 1 一个n个节点， n-1个区间
     int[] res = new int[queries.length];
     //记录每个节点联通的下一个最远的节点
@@ -41,6 +70,8 @@ public class ShortestDistanceAfterQueries {
         }
       }
       res[i] = uf.size;
+      // 更新当前起点的下一个节点
+      nexts[begin] = end;
     }
     return res;
   }
