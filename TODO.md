@@ -5,3 +5,6 @@
 * 字典树
 * 4 寻找两个正序数组的中位数 logn 
 * LFU
+
+
+1.使用ArrayDeque实现栈和队列 Deque<Character> stack = new ArrayDeque<>();
